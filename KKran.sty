@@ -18,7 +18,7 @@
 \newcount\NUM@shoumon
 
 \NewDocumentCommand{\Daimon@Box@A}{ O{.7pt} m m }{%
-  \advance\NUM@mondai by 1%
+  \global\advance\NUM@mondai by 1%
   \draw[line width=#1] (0,0) rectangle (#2\width@KKran,- #3\width@KKran);%
   \node[anchor=center,overlay
   % ,rotate=90 % 縦書きなら

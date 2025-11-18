@@ -61,10 +61,23 @@
       \edef\mondai@position@tmp{\pgfmathresult}%
     \else
       \ifnum\amari@grid@max@A=0
-        \draw[step=\unit@KKran,dashed,line width=#2] (\mondai@position@tmp\width@KKran, -\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran) grid (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran);
+        % 座標の短縮
+        \coordinate (P) at (\mondai@position@tmp\width@KKran, -\mondai@position@y@tmp\width@KKran);
+        \def\H{\shou@grid@max@A\unit@KKran}
 
-        % 上から白く塗ってグリッドの左端を見えなくする。
-        \draw[white,line width=1.05*#2,overlay] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);
+        % 垂直線（左端除去）
+        \foreach \x in {1,2,...,\grid@x@A} {
+          \draw[dashed,line width=#2]
+            ($(P) + (\x\unit@KKran,0)$)
+            -- ++(0,-\shou@grid@max@A\unit@KKran);
+        }
+
+        % 水平線
+        \foreach \y in {0,1,...,\amari@grid@max@A} {
+          \draw[dashed,line width=#2]
+            ($(P) + (0,-\y\unit@KKran)$)
+            -- ++(\grid@x@A\unit@KKran,0);
+        }
 
         \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);
         \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran) -- (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);

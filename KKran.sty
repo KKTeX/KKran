@@ -50,12 +50,19 @@
     \pgfmathtruncatemacro{\amari@grid@min@A}{mod(\grid@min@A,\grid@x@A)}%
     
     \ifnum\grid@max@A<\grid@x@A
-      \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,-\unit@KKran) -- ++ (\amari@grid@max@A\unit@KKran,0) -- ++ (0,\shou@grid@max@A\unit@KKran+\unit@KKran) -- cycle;
+      \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off]  (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran);
+      \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran);
+      \draw[line width=#1] (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@max@A\unit@KKran);
+      \draw[line width=#1] (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@max@A\unit@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);
+
       \pgfmathparse{\mondai@position@tmp + \grid@max@A}%
       \edef\mondai@position@tmp{\pgfmathresult}%
     \else
       \ifnum\amari@grid@max@A=0% maxの方の描画
-        \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,-\shou@grid@max@A\unit@KKran) -- ++ (\grid@x@A\unit@KKran,0) -- ++ (0,\shou@grid@max@A\unit@KKran) -- cycle;
+        \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);
+        \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran) -- (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);
+        \draw[line width=#1] (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran) -- (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran);
+        \draw[line width=#1] (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);
       \else
         \coordinate (A) at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);%
         \coordinate (B) at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran-\unit@KKran);%
@@ -63,13 +70,17 @@
         \coordinate (D) at (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);%
         \coordinate (E) at (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);%
         \coordinate (F) at (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran);%
-        \draw[line width=#1] (A) -- (B) -- (C) -- (D) -- (E) -- (F) -- cycle;
+        \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (A) -- (B);
+        \draw[line width=#1] (B) -- (C);
+        \draw[line width=#1] (C) -- (D);
+        \draw[line width=#1] (D) -- (E);
+        \draw[line width=#1] (E) -- (F);
+        \draw[line width=#1] (F) -- (A);
       \fi
-      \pgfmathparse{\mondai@position@tmp + \grid@x@A/2}%
+      \pgfmathparse{\mondai@position@tmp + \grid@x@A}%
       \edef\mondai@position@tmp{\pgfmathresult}%
     \fi
 }
-
 
 
 \NewDocumentCommand{\Shoumon@Box@B}{ O{.7pt} O{.35pt} m m }{% 小問（右が点線に）

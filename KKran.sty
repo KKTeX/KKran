@@ -49,7 +49,9 @@
     \pgfmathtruncatemacro{\shou@grid@min@A}{\grid@min@A / \grid@x@A}%
     \pgfmathtruncatemacro{\amari@grid@min@A}{mod(\grid@min@A,\grid@x@A)}%
     
-    \ifnum\grid@max@A<\grid@x@A
+    \ifnum\grid@max@A<\grid@x@A% maxの方の描画
+      \draw[step=\unit@KKran,dashed,line width=#2] (\mondai@position@tmp\width@KKran+\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) grid (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@max@A\unit@KKran);% まずはマス目
+
       \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off]  (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran);
       \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran);
       \draw[line width=#1] (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@max@A\unit@KKran);
@@ -58,11 +60,17 @@
       \pgfmathparse{\mondai@position@tmp + \grid@max@A}%
       \edef\mondai@position@tmp{\pgfmathresult}%
     \else
-      \ifnum\amari@grid@max@A=0% maxの方の描画
+      \ifnum\amari@grid@max@A=0
+        \draw[step=\unit@KKran,dashed,line width=#2] (\mondai@position@tmp\width@KKran, -\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran) grid (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran);
+
+        % 上から白く塗ってグリッドの左端を見えなくする。
+        \draw[white,line width=1.05*#2,overlay] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);
+
         \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);
         \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran) -- (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);
         \draw[line width=#1] (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran) -- (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran);
         \draw[line width=#1] (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);
+
       \else
         \coordinate (A) at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);%
         \coordinate (B) at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran-\unit@KKran);%

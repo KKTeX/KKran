@@ -1,0 +1,61 @@
+\RequirePackage{calc}
+\RequirePackage{tikz}
+\RequirePackage{KKsymbols}
+\usetikzlibrary{shapes}
+\usetikzlibrary{calc}
+
+\newdimen\width@KKran
+\width@KKran=3\zw
+
+\def\modai@bangou@wd{0.5}
+\def\mondai@position@tmp{0}
+\def\mondai@position@y@tmp{0}
+
+\def\mondai@dash@pat@on{.3pt}
+\def\mondai@dash@pat@off{.5pt}
+
+\newcount\NUM@mondai
+\newcount\NUM@shoumon
+
+\NewDocumentCommand{\Daimon@Box@A}{ O{.7pt} m m }{%
+  \advance\NUM@mondai by 1%
+  \draw[line width=#1] (0,0) rectangle (#2\width@KKran,- #3\width@KKran);%
+  \node[anchor=center,overlay
+  % ,rotate=90 % 縦書きなら
+  ]
+   at (.5*#2\width@KKran,- .5*#3\width@KKran) {\scalebox{1}{\kakko{\number\NUM@mondai}}};
+  \pgfmathparse{\mondai@position@tmp + \modai@bangou@wd}%
+  \edef\mondai@position@tmp{\pgfmathresult}%
+}
+
+\NewDocumentCommand{\Shoumon@Box@A}{ O{.7pt} m m }{%
+  \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#2\width@KKran,0) -- ++ (0,- #3\width@KKran) -- ++(-#2\width@KKran,0);%
+  \pgfmathparse{\mondai@position@tmp + #2}%
+  \edef\mondai@position@tmp{\pgfmathresult}%
+}
+
+\NewDocumentCommand{\Shoumon@Box@B}{ m m m m }{%
+  \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#3\width@KKran,0);
+  \draw[line width=#2, dash pattern=on \def\mondai@dash@pat@on off \def\mondai@dash@pat@off] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #4\width@KKran);
+  \draw[line width=#1] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran- #4\width@KKran) -- ++ (-#3\width@KKran,0);
+  \pgfmathparse{\mondai@position@tmp + #3}%
+  \edef\mondai@position@tmp{\pgfmathresult}%
+}
+
+\NewDocumentCommand{\Shoumon@Box@A@P}{ O{.7pt} O{.35pt} O{.5} m }{%
+  \advance\NUM@shoumon by 1%
+  \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#3\width@KKran,0);
+  \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #4\width@KKran);
+  \draw[line width=#1] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran- #4\width@KKran) -- ++ (-#3\width@KKran,0);
+  \node[anchor=center,overlay] at (\mondai@position@tmp\width@KKran+.5*#3\width@KKran,-\mondai@position@y@tmp\width@KKran- .5*#4\width@KKran) {\scalebox{1}{\kakko{\number\NUM@shoumon}}};
+  \pgfmathparse{\mondai@position@tmp + #3}%
+  \edef\mondai@position@tmp{\pgfmathresult}%
+}
+
+\NewDocumentCommand{\GoDown}{m}{%
+  \pgfmathparse{\mondai@position@y@tmp + #1}%
+  \edef\mondai@position@y@tmp{\pgfmathresult}%
+  \def\mondai@position@tmp{0}%
+  \pgfmathparse{\mondai@position@tmp + \modai@bangou@wd}%
+  \edef\mondai@position@tmp{\pgfmathresult}%
+}

@@ -1,4 +1,4 @@
-\documentclass[tate]{jlreq}
+\documentclass{jlreq}
 
 \RequirePackage{calc}
 \RequirePackage{tikz}
@@ -6,74 +6,27 @@
 \usetikzlibrary{shapes}
 \usetikzlibrary{calc}
 
+\usepackage{KKran}
+
 \makeatletter
 
 \begin{document}
-\newdimen\width@KKran
-\width@KKran=3\zw
 
-\def\AA{.5}
-\def\AAA{1}
-\def\AAAA{2}\def\AAAB{3}
-\def\AAB{4}
-\def\AAC{.7pt}
-\def\AACA{.3pt}
-\def\AACB{.5pt}
+% \def\AA{.5}
+% \def\AAA{1}
+% \def\AAAA{2}\def\AAAB{3}
+% \def\AAB{4}
+% \def\AAC{.7pt}
+% \def\AACA{.3pt}
+% \def\AACB{.5pt}
 
-\def\AAD{0}
-\def\AAE{0}
-
-\NewDocumentCommand{\Daimon@Box@A}{ m m m }{%
-  \draw[line width=#1] (0,0) rectangle (#2\width@KKran,- #3\width@KKran);%
-  \node[anchor=center,overlay
-  % ,rotate=90 % 縦書きなら
-  ]
-   at (.5*#2\width@KKran,- .5*#3\width@KKran) {\scalebox{1}{\kakko{n}}};
-  \pgfmathparse{\AAD + \AA}%
-  \edef\AAD{\pgfmathresult}%
-}
-
-\NewDocumentCommand{\Shoumon@Box@A}{ m m m }{%
-  \draw[line width=#1] (\AAD\width@KKran,-\AAE\width@KKran) -- ++ (#2\width@KKran,0) -- ++ (0,- #3\width@KKran) -- ++(-#2\width@KKran,0);%
-  \pgfmathparse{\AAD + #2}%
-  \edef\AAD{\pgfmathresult}%
-}
-
-\NewDocumentCommand{\Shoumon@Box@B}{ m m m m }{%
-  \draw[line width=#1] (\AAD\width@KKran,-\AAE\width@KKran) -- ++ (#3\width@KKran,0);
-  \draw[line width=#2, dash pattern=on \AACB off \AACB] (\AAD\width@KKran+#3\width@KKran,-\AAE\width@KKran) -- ++ (0,- #4\width@KKran);
-  \draw[line width=#1] (\AAD\width@KKran+#3\width@KKran,-\AAE\width@KKran- #4\width@KKran) -- ++ (-#3\width@KKran,0);
-  \pgfmathparse{\AAD + #3}%
-  \edef\AAD{\pgfmathresult}%
-}
-
-\NewDocumentCommand{\Shoumon@Box@A@P}{ m m m m }{%
-  \draw[line width=#1] (\AAD\width@KKran,-\AAE\width@KKran) -- ++ (#3\width@KKran,0);
-  \draw[line width=#2, dash pattern=on \AACB off \AACB] (\AAD\width@KKran+#3\width@KKran,-\AAE\width@KKran) -- ++ (0,- #4\width@KKran);
-  \draw[line width=#1] (\AAD\width@KKran+#3\width@KKran,-\AAE\width@KKran- #4\width@KKran) -- ++ (-#3\width@KKran,0);
-  \node[anchor=center,overlay] at (\AAD\width@KKran+.5*#3\width@KKran,-\AAE\width@KKran- .5*#4\width@KKran) {\scalebox{1}{\kakko{n}}};
-  \pgfmathparse{\AAD + #3}%
-  \edef\AAD{\pgfmathresult}%
-}
-
-\NewDocumentCommand{\GoDown}{}{%
-  \pgfmathparse{\AAE + \AAA}%
-  \edef\AAE{\pgfmathresult}%
-  \def\AAD{0}%
-  \pgfmathparse{\AAD + \AA}%
-  \edef\AAD{\pgfmathresult}%
-}
+% \def\AAD{0}
+% \def\AAE{0}
 
 \begin{tikzpicture}
-  \Daimon@Box@A{\AAC}{\AA}{\AAB}%
-  \Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\Shoumon@Box@B{\AAC}{\AACA}{\AAAB}{\AAA}\Shoumon@Box@A{\AAC}{\AAAB}{\AAA}\Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\GoDown%
-  \Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\Shoumon@Box@A{\AAC}{\AAAB}{\AAA}\Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\Shoumon@Box@A{\AAC}{\AAAA}{\AAA}%
-\end{tikzpicture}
-
-\begin{tikzpicture}
-  \Daimon@Box@A{\AAC}{\AA}{\AAB}%
-  \Shoumon@Box@A@P{\AAC}{\AACA}{\AA}{\AAA}\Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\GoDown%
-  \Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\Shoumon@Box@A{\AAC}{\AAAA}{\AAA}\Shoumon@Box@A{\AAC}{\AAAA}{\AAA}%
+  \Daimon@Box@A{.5}{4}%
+  \Shoumon@Box@A@P{2}\Shoumon@Box@A{3}{2}\Shoumon@Box@A@P{2}\Shoumon@Box@A{5}{2}\Shoumon@Box@A@P{2}\Shoumon@Box@A{3}{2}\GoDown{2}
+  \Shoumon@Box@A@P{2}\Shoumon@Box@A{3}{2}\Shoumon@Box@A@P{2}\Shoumon@Box@A{5}{2}\Shoumon@Box@A@P{2}\Shoumon@Box@A{3}{2}
 \end{tikzpicture}
 \end{document}
 

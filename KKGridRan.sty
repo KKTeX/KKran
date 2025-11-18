@@ -1,0 +1,198 @@
+\ProvidesPackage{answerbox_literature}[2025/10/21, v1.0.2]
+
+% 役物系はichimojiコマンドでok
+
+% unitの変更は禁止で、scaleboxでの対応とする。
+
+\define@key{ykran}{gyou}{\def\YKRan@gyou{#1}}
+\define@key{ykran}{min}{\def\YKRan@min{#1}}
+\define@key{ykran}{scale}{\def\YKRan@scale{#1}}
+
+\NewDocumentCommand\YKRan{ O{} m O{}}{%
+  \def\YKRan@gyou{20}\def\YKRan@scale{1}\setkeys{ykran}{#1}%
+  \def\kazu{#2}% 描画枠の数（ここのみマスト）
+  \def\haba{\YKRan@gyou}% 横の枠幅(デフォルト20)
+  \def\myunit{5mm}% これをスケールで調整
+  \def\saishou{\YKRan@min}%
+  \newdimen\myunitdimen%
+  \myunitdimen=\myunit%
+  \newdimen\mybaselineskip%
+  \mybaselineskip=\myunitdimen%
+  \scalebox{\YKRan@scale}{\raisebox{1.2\myunitdimen}%
+  {\begin{tikzpicture}[x=\myunit,y=\myunit,baseline=(current bounding box.north)]%
+    \pgfmathint   {0} \let \xmin = \pgfmathresult%
+    \pgfmathparse {int(mod( \kazu, \haba ))} \let \xmid = \pgfmathresult%
+    \pgfmathparse {int(min( \kazu, \haba ))} \let \xmax = \pgfmathresult%
+
+    \pgfmathint   {0} \let \ymin = \pgfmathresult%
+    \pgfmathint   {1} \let \ymid = \pgfmathresult%
+    \pgfmathint   {(\kazu + \haba -1) / \haba} \let \ymax = \pgfmathresult%
+
+    \pgfmathparse {int(mod(\saishou,\haba))} \let \amasai = \pgfmathresult%
+    \pgfmathparse {int(\saishou/\haba)} \let \shousai = \pgfmathresult%
+
+    \pgfmathtruncatemacro\trow{ceil(\kazu/\haba)}%
+    \pgfmathtruncatemacro\kazuEqualsSaishou{ifthenelse(\kazu==\saishou, 1, 0)}%
+    \pgfmathtruncatemacro\habas{ifthenelse(\kazu <= \haba, 0, \haba)}%
+
+    \ifnum \xmid = 0 \pgfmathint { 0 } \let\ymid=\pgfmathresult \fi%
+
+    \message{myMath #2 \YKRan@gyou ymin=\ymin , ymid=\ymid ,ymax=\ymax ====}%
+
+    \coordinate (A) at ( \xmin, \ymin );%
+    \coordinate (B) at ( \xmin, \ymax );%
+    \coordinate (C) at ( \xmax, \ymax );%
+    \coordinate (D) at ( \xmax, \ymid );%
+    \coordinate (G) at ( \amasai, \trow-\shousai-1);%
+    \coordinate (H) at ( \amasai, \trow-\shousai);%
+    \coordinate (I) at ( \habas, \trow-\shousai);%
+    \coordinate (J) at ( 0, \trow-\shousai-1);%
+
+    \ifnum \xmid = 0%
+        \foreach \y in {\ymin, ..., \ymax} {%
+          \draw[thin,dashed] (\xmin, \y) -- (\xmax, \y);%
+        }%
+        \draw[thick ] (A) -- (B) -- (C) -- (D) -- cycle;%
+        \ifnum\kazuEqualsSaishou=0%
+          \draw[thick] (H) -- (G);%
+        \fi%
+        \draw[thick] (H) -- (I);%
+        \draw[thick] (G) -- (J);%
+        \node[anchor=north west, text width=\haba * \myunit, align=left] at ([xshift=-0.2*\myunit,yshift=0.195*\myunit]B) {%
+        \fontsize{\the\myunitdimen}{1.2\myunitdimen}\selectfont\setlength{\baselineskip}%
+        {\mybaselineskip}\selectfont\setlength{\lineskiplimit}{-10pt}%
+        \setlength{\lineskip}{0pt}#3 \par};%
+    \else
+        \coordinate (E) at ( \xmid, \ymid );%
+        \coordinate (F) at ( \xmid, \ymin );%
+        \foreach \y in {\ymin, ..., \ymax} {%
+          \draw[thin,dashed] (\xmin, \y) -- (\xmid, \y);%
+        }%
+        \foreach \y in {\ymid, ..., \ymax} {%
+          \draw[thin,dashed] (\xmid, \y) -- (\xmax, \y);%
+        }%
+        \draw[thick ] (A) -- (B) -- (C) -- (D) -- (E) -- (F) -- cycle;%
+        \ifnum\kazuEqualsSaishou=0%
+          \draw[thick] (H) -- (G);%
+        \fi%
+        \draw[thick] (H) -- (I);%
+        \draw[thick] (G) -- (J);%
+        \node[anchor=north west, text width=\haba * \myunit, align=left] at ([xshift=-0.2*\myunit,yshift=0.195*\myunit]B) {%
+        \fontsize{\the\myunitdimen}{1.2\myunitdimen}\selectfont\setlength{\baselineskip}%
+        {\mybaselineskip}\selectfont\setlength{\lineskiplimit}{-10pt}%
+        \setlength{\lineskip}{0pt}\ltjsetparameter{kanjiskip=0pt}\ltjsetparameter{xkanjiskip=0pt}#3 \par};%
+    \fi%
+    \ifnum \xmax > 10%
+        \foreach \x in { 5, 10,..., \xmax }%
+        \draw (\x - .5 , \ymax + .6 ) node[anchor=north]{\phantom{\footnotesize\x}};%
+        \ifnum\kazuEqualsSaishou=0%
+          \draw[thick] (H) -- (G);%
+        \fi%
+        \draw[thick] (G) -- (J);%
+    \else%
+        \foreach \x in { 5, 10 }%
+        \draw (\x - .5 , \ymax + .6 ) node[anchor=north]{\phantom{\footnotesize\x}};%
+        \ifnum\kazuEqualsSaishou=0%
+          \draw[thick] (H) -- (G);%
+        \fi%
+        \draw[thick] (G) -- (J);%
+    \fi%
+  \end{tikzpicture}}}%
+}
+
+\NewDocumentCommand\YMRan{ O{} m O{}}{\normalsize%
+  \def\YKRan@gyou{20}\def\YKRan@scale{1}\setkeys{ykran}{#1}%
+  \def\kazu{#2}% 描画枠の数（ここのみマスト）
+  \def\haba{\YKRan@gyou}% 横の枠幅(デフォルト20)
+  \def\myunit{5mm}% これをスケールで調整
+  \def\saishou{\YKRan@min}%
+  \newdimen\myunitdimen%
+  \myunitdimen=\myunit%
+  \newdimen\mybaselineskip%
+  \mybaselineskip=\myunitdimen%
+  \scalebox{\YKRan@scale}{\raisebox{1.2\myunitdimen}%
+  {\begin{tikzpicture}[x=\myunit,y=\myunit, baseline=(current bounding box.north)]%
+    \pgfmathint   {0} \let \xmin = \pgfmathresult%
+    \pgfmathparse {int(mod( \kazu, \haba ))} \let \xmid = \pgfmathresult%
+    \pgfmathparse {int(min( \kazu, \haba ))} \let \xmax = \pgfmathresult%
+
+    \pgfmathint   {0} \let \ymin = \pgfmathresult%
+    \pgfmathint   {1} \let \ymid = \pgfmathresult%
+    \pgfmathint   {(\kazu + \haba -1) / \haba} \let \ymax = \pgfmathresult%
+
+    \pgfmathparse {int(mod(\saishou,\haba))} \let \amasai = \pgfmathresult%
+    \pgfmathparse {int(\saishou/\haba)} \let \shousai = \pgfmathresult%
+
+    \pgfmathtruncatemacro\trow{ceil(\kazu/\haba)}%
+    \pgfmathtruncatemacro\kazuEqualsSaishou{ifthenelse(\kazu==\saishou, 1, 0)}%
+    \pgfmathtruncatemacro\habas{ifthenelse(\kazu <= \haba, 0, \haba)}%
+
+    \ifnum \xmid = 0 \pgfmathint { 0 } \let\ymid=\pgfmathresult \fi%
+
+    \message{myMath #2 \YKRan@gyou ymin=\ymin , ymid=\ymid ,ymax=\ymax ====}%
+
+    \coordinate (A) at ( \xmin, \ymin );%
+    \coordinate (B) at ( \xmin, \ymax );%
+    \coordinate (C) at ( \xmax, \ymax );%
+    \coordinate (D) at ( \xmax, \ymid );%
+    \coordinate (G) at ( \amasai, \trow-\shousai-1);%
+    \coordinate (H) at ( \amasai, \trow-\shousai);%
+    \coordinate (I) at ( \habas, \trow-\shousai);%
+    \coordinate (J) at ( 0, \trow-\shousai-1);%
+
+    \ifnum \xmid = 0%
+        \draw[step=1,dashed] (A) grid (C);%
+        \draw[thick ] (A) -- (B) -- (C) -- (D) -- cycle;%
+        \ifnum\kazuEqualsSaishou=0%
+          \draw[thick] (H) -- (G);%
+        \fi%
+        \draw[thick] (H) -- (I);%
+        \draw[thick] (G) -- (J);%
+        \node[anchor=north west, text width=\haba * \myunit, align=left] at ([xshift=-0.2*\myunit,yshift=0.195*\myunit]B) {%
+        \fontsize{\the\myunitdimen}{1.2\myunitdimen}\selectfont\setlength{\baselineskip}{\mybaselineskip}\selectfont\setlength{\lineskiplimit}{-10pt}%
+        \setlength{\lineskip}{0pt}\ltjsetparameter{kanjiskip=0pt}\ltjsetparameter{xkanjiskip=0pt}#3 \par};%
+    \else%
+        \coordinate (E) at ( \xmid, \ymid );%
+        \coordinate (F) at ( \xmid, \ymin );%
+        \draw[step=1,dashed] (A) grid ( \xmid, \ymax );%
+        \draw[step=1,dashed] ( \xmid, \ymid ) grid (C);%
+        \draw[thick ] (A) -- (B) -- (C) -- (D) -- (E) -- (F) -- cycle;%
+        \ifnum\kazuEqualsSaishou=0%
+          \draw[thick] (H) -- (G);%
+        \fi%
+        \draw[thick] (H) -- (I);%
+        \draw[thick] (G) -- (J);%
+        \node[anchor=north west, text width=\haba * \myunit, align=left] at ([xshift=-0.2*\myunit,yshift=0.195*\myunit]B) {%
+        \fontsize{\the\myunitdimen}{1.2\myunitdimen}\selectfont\setlength{\baselineskip}%
+        {\mybaselineskip}\selectfont\setlength{\lineskiplimit}{-10pt}%
+        \setlength{\lineskip}{0pt}\ltjsetparameter{kanjiskip=0pt}\ltjsetparameter{xkanjiskip=0pt}#3 \par};%
+    \fi%
+    \ifnum \xmax > 10%
+        \ifnum\kazuEqualsSaishou=0%
+          \draw[thick] (H) -- (G);%
+        \fi%
+        \draw[thick] (G) -- (J);%
+    \else%
+        \ifnum\kazuEqualsSaishou=0%
+          \draw[thick] (H) -- (G);%
+        \fi%
+        \draw[thick] (G) -- (J);%
+    \fi%
+    \ifnum \xmax > 10%
+        \foreach \x in { 5, 10,..., \xmax }%
+        \draw (\x - .5 , \ymax + .6 ) node[anchor=north]{\footnotesize\x};%
+        \ifnum\kazuEqualsSaishou=0%
+          \draw[thick] (H) -- (G);%
+        \fi%
+        \draw[thick] (G) -- (J);%
+    \else%
+        \foreach \x in { 5, 10 }%
+        \draw (\x - .5 , \ymax + .6 ) node[anchor=north]{\footnotesize\x};%
+        \ifnum\kazuEqualsSaishou=0%
+          \draw[thick] (H) -- (G);%
+        \fi%
+        \draw[thick] (G) -- (J);%
+    \fi%
+  \end{tikzpicture}}}%
+}
+\endinput

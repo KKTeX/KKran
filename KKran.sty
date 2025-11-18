@@ -11,13 +11,13 @@
 \def\mondai@position@tmp{0}
 \def\mondai@position@y@tmp{0}
 
-\def\mondai@dash@pat@on{.3pt}
-\def\mondai@dash@pat@off{.5pt}
+\def\mondai@dash@pat@on{.5pt}
+\def\mondai@dash@pat@off{.7pt}
 
 \newcount\NUM@mondai
 \newcount\NUM@shoumon
 
-\NewDocumentCommand{\Daimon@Box@A}{ O{.7pt} m m }{%
+\NewDocumentCommand{\Daimon@Box@A}{ O{.7pt} m m }{% 大問番号
   \global\advance\NUM@mondai by 1%
   \draw[line width=#1] (0,0) rectangle (#2\width@KKran,- #3\width@KKran);%
   \node[anchor=center,overlay
@@ -28,21 +28,24 @@
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
 
-\NewDocumentCommand{\Shoumon@Box@A}{ O{.7pt} m m }{%
+
+\NewDocumentCommand{\Shoumon@Box@A}{ O{.7pt} m m }{% 小問
   \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#2\width@KKran,0) -- ++ (0,- #3\width@KKran) -- ++(-#2\width@KKran,0);%
   \pgfmathparse{\mondai@position@tmp + #2}%
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
 
-\NewDocumentCommand{\Shoumon@Box@B}{ m m m m }{%
+
+\NewDocumentCommand{\Shoumon@Box@B}{ O{.7pt} O{.35pt} m m }{% 小問（右が点線に）
   \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#3\width@KKran,0);
-  \draw[line width=#2, dash pattern=on \def\mondai@dash@pat@on off \def\mondai@dash@pat@off] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #4\width@KKran);
+  \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #4\width@KKran);
   \draw[line width=#1] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran- #4\width@KKran) -- ++ (-#3\width@KKran,0);
   \pgfmathparse{\mondai@position@tmp + #3}%
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
 
-\NewDocumentCommand{\Shoumon@Box@A@P}{ O{.7pt} O{.35pt} O{.5} m }{%
+
+\NewDocumentCommand{\Shoumon@Box@A@P}{ O{.7pt} O{.35pt} O{.5} m }{% 小問番号
   \advance\NUM@shoumon by 1%
   \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#3\width@KKran,0);
   \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #4\width@KKran);
@@ -52,7 +55,8 @@
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
 
-\NewDocumentCommand{\GoDown}{m}{%
+
+\NewDocumentCommand{\GoDown}{m}{% 下へ行く
   \pgfmathparse{\mondai@position@y@tmp + #1}%
   \edef\mondai@position@y@tmp{\pgfmathresult}%
   \def\mondai@position@tmp{0}%

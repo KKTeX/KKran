@@ -229,13 +229,13 @@
         \foreach \y in {0,1,...,\shou@nongrid@max@A} {% 左ブロック
           \draw[dashed,line width=#2]
             ($(A@amari@non@zero) + (0,-\y\unit@KKran)$)
-            -- ++(\amari@nongrid@max@A\unit@KKran,0);
+            -- ++(\nongrid@x@A\unit@KKran,0);
         }
-        \foreach \y in {0,1,...,\shou@nongrid@max@A} {% 右ブロック
+        % \foreach \y in {0,1,...,\shou@nongrid@max@A} {% 右ブロック
           \draw[dashed,line width=#2]
-            ($(D@amari@non@zero) + (0,\y\unit@KKran)$)
+            ($(D@amari@non@zero) + (0,\shou@nongrid@max@A\unit@KKran)$)
             -- ++(\max@minus@amari@nongrid@max@A\unit@KKran,0);
-        }
+        % }
 
         \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (A@amari@non@zero) -- (B@amari@non@zero);
         \draw[line width=#1] (B@amari@non@zero) -- (C@amari@non@zero)

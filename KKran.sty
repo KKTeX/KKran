@@ -1,3 +1,5 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{KKran}[2025/11/23, Version 1.0.0]
 \RequirePackage{calc}
 \RequirePackage{tikz}
 \RequirePackage{KKsymbols}
@@ -226,16 +228,14 @@
         \coordinate (F@amari@non@zero) at (\mondai@position@tmp\width@KKran+\nongrid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran);%
 
         % 水平線
-        \foreach \y in {0,1,...,\shou@nongrid@max@A} {% 左ブロック
+        \foreach \y in {0,1,...,\shou@nongrid@max@A} {% 上ブロック
           \draw[dashed,line width=#2]
             ($(A@amari@non@zero) + (0,-\y\unit@KKran)$)
             -- ++(\nongrid@x@A\unit@KKran,0);
         }
-        % \foreach \y in {0,1,...,\shou@nongrid@max@A} {% 右ブロック
-          \draw[dashed,line width=#2]
-            ($(D@amari@non@zero) + (0,\shou@nongrid@max@A\unit@KKran)$)
-            -- ++(\max@minus@amari@nongrid@max@A\unit@KKran,0);
-        % }
+        \draw[dashed,line width=#2]% 下ブロック
+          ($(D@amari@non@zero) + (0,\shou@nongrid@max@A\unit@KKran)$)
+          -- ++(\max@minus@amari@nongrid@max@A\unit@KKran,0);
 
         \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (A@amari@non@zero) -- (B@amari@non@zero);
         \draw[line width=#1] (B@amari@non@zero) -- (C@amari@non@zero)
@@ -253,3 +253,5 @@
   \pgfmathparse{\mondai@position@tmp + \modai@bangou@wd}%
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
+
+\endinput

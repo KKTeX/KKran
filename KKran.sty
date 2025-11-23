@@ -360,7 +360,6 @@
 
   % Shoumon@Grid@A/NonGrid@A
   \RenewDocumentCommand{\Shoumon@Grid@A}{ m O{##1}}{%
-    % 必須: 元の座標計算ロジックを保持
     \def\grid@max@A{##1}\def\grid@min@A{##2}%
     \def\grid@x@A{20}% 可変にしてもいい
     \pgfmathtruncatemacro{\shou@grid@max@A}{\grid@max@A / \grid@x@A}%
@@ -396,15 +395,14 @@
     \fi
   }
   \RenewDocumentCommand{\Shoumon@NonGrid@A}{ m O{##1}}{%
-    % 必須: 元の座標計算ロジックを保持
-    \def\nongrid@max@A{##1}\def\nongrid@min@A{##2}% <-- grid を nongrid に変更
-    \def\nongrid@x@A{20}% 可変にしてもいい <-- grid を nongrid に変更
-    \pgfmathtruncatemacro{\shou@nongrid@max@A}{\nongrid@max@A / \nongrid@x@A}% <-- grid を nongrid に変更
+    \def\nongrid@max@A{##1}\def\nongrid@min@A{##2}% 
+    \def\nongrid@x@A{20}% 可変にしてもいい
+    \pgfmathtruncatemacro{\shou@nongrid@max@A}{\nongrid@max@A / \nongrid@x@A}% 
     \pgfmathtruncatemacro{\amari@nongrid@max@A}{mod(\nongrid@max@A,\nongrid@x@A)}% <-- grid を nongrid に変更
-    \pgfmathtruncatemacro{\max@minus@amari@nongrid@max@A}{\nongrid@x@A-\amari@nongrid@max@A}% <-- grid を nongrid に変更
-    \pgfmathtruncatemacro{\shou@nongrid@min@A}{\nongrid@min@A / \nongrid@x@A}% <-- grid を nongrid に変更
-    \pgfmathtruncatemacro{\amari@nongrid@min@A}{mod(\nongrid@min@A,\nongrid@x@A)}% <-- grid を nongrid に変更
-    \pgfmathtruncatemacro{\min@minus@amari@nongrid@min@A}{\nongrid@x@A-\amari@nongrid@min@A}% <-- grid を nongrid に変更
+    \pgfmathtruncatemacro{\max@minus@amari@nongrid@max@A}{\nongrid@x@A-\amari@nongrid@max@A}% 
+    \pgfmathtruncatemacro{\shou@nongrid@min@A}{\nongrid@min@A / \nongrid@x@A}% 
+    \pgfmathtruncatemacro{\amari@nongrid@min@A}{mod(\nongrid@min@A,\nongrid@x@A)}% 
+    \pgfmathtruncatemacro{\min@minus@amari@nongrid@min@A}{\nongrid@x@A-\amari@nongrid@min@A}% 
     
     \ifnum\nongrid@max@A<\nongrid@x@A
       \fill
@@ -413,7 +411,6 @@
       (\mondai@position@tmp\width@KKran+\amari@nongrid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@nongrid@max@A\unit@KKran) -- % 3. 右の縦の辺 (右上の角)
       (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran+\shou@nongrid@max@A\unit@KKran) -- cycle; % 4. 上辺の終点 (左上の角)
       
-      % 必須: 座標更新ロジックの保持 (Case 1)
       \pgfmathparse{\mondai@position@tmp + \nongrid@max@A}%
       \edef\mondai@position@tmp{\pgfmathresult}%
     \else
@@ -424,7 +421,6 @@
           (\mondai@position@tmp\width@KKran+\nongrid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran) -- % 終点 C
           (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- cycle; % 終点 D
 
-        % 必須: 座標更新ロジックの保持 (Case 2)
         \pgfmathparse{\mondai@position@tmp + \nongrid@x@A}%
         \edef\mondai@position@tmp{\pgfmathresult}%
       \else
@@ -437,7 +433,6 @@
         \fill (B@amari@non@zero) -- (C@amari@non@zero)
         -- (D@amari@non@zero) -- (E@amari@non@zero) -- (F@amari@non@zero) -- (A@amari@non@zero) -- cycle;
 
-        % 必須: 座標更新ロジックの保持 (Case 3)
         \pgfmathparse{\mondai@position@tmp + \nongrid@x@A}%
         \edef\mondai@position@tmp{\pgfmathresult}%
       \fi

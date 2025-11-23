@@ -45,14 +45,14 @@
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
 
-\NewDocumentCommand{\Shoumon@Box@A@N}{ O{.7pt} O{.35pt} O{.5} m }{% 小問番号
+\NewDocumentCommand{\Shoumon@Box@A@N}{ O{.5} m }{% 小問番号
   \advance\NUM@shoumon by 1%
-  \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #4\width@KKran);
-  \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#3\width@KKran,0);
-  \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #4\width@KKran);
-  \draw[line width=#1] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran- #4\width@KKran) -- ++ (-#3\width@KKran,0);
-  \node[anchor=center,overlay] at (\mondai@position@tmp\width@KKran+.5*#3\width@KKran,-\mondai@position@y@tmp\width@KKran- .5*#4\width@KKran) {\scalebox{.8}{\kakko{\number\NUM@shoumon}}};
-  \pgfmathparse{\mondai@position@tmp + #3}%
+  \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #2\width@KKran);
+  \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#1\width@KKran,0);
+  \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran+#1\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #2\width@KKran);
+  \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran+#1\width@KKran,-\mondai@position@y@tmp\width@KKran- #2\width@KKran) -- ++ (-#1\width@KKran,0);
+  \node[anchor=center,overlay] at (\mondai@position@tmp\width@KKran+.5*#1\width@KKran,-\mondai@position@y@tmp\width@KKran- .5*#2\width@KKran) {\scalebox{.8}{\kakko{\number\NUM@shoumon}}};
+  \pgfmathparse{\mondai@position@tmp + #1}%
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
 
@@ -335,10 +335,10 @@
   }%
   
   % Shoumon@Box@A@N のパッチ
-  \RenewDocumentCommand{\Shoumon@Box@A@N}{ O{.7pt} O{.35pt} O{.5} m }{%
+  \RenewDocumentCommand{\Shoumon@Box@A@N}{ O{.5} m }{%
     \fill (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) 
-          rectangle ++(##3\width@KKran, -##4\width@KKran);%
-    \pgfmathparse{\mondai@position@tmp + ##3}%
+          rectangle ++(##1\width@KKran, -##2\width@KKran);%
+    \pgfmathparse{\mondai@position@tmp + ##1}%
     \edef\mondai@position@tmp{\pgfmathresult}%
   }%
   

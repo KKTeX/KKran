@@ -59,7 +59,6 @@
 }
 
 
-% 引数の修正がまだ！
 \define@key{Shoumon@Box@A}{west}{%
   \def\westtext@Shoumon@Box@A{#1}%
 }
@@ -90,18 +89,18 @@
   \def\swtext@Shoumon@Box@A{}%
   \def\setext@Shoumon@Box@A{}%
 }
-\NewDocumentCommand{\Shoumon@Box@A}{ O{.7pt} O{.35pt} m m O{} }{% 小問
-  \reset@Shoumon@Box@A\setkeys{Shoumon@Box@A}{#5}%
+\NewDocumentCommand{\Shoumon@Box@A}{ m m O{} }{% 小問
+  \reset@Shoumon@Box@A\setkeys{Shoumon@Box@A}{#3}%
 
   % 左上から反時計回りに A, B, C, D を定義
   \path (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) coordinate (A@Shoumon@Box@A)
-        -- ++(0,-#4\width@KKran) coordinate (B@Shoumon@Box@A)
-        -- ++(#3\width@KKran,0)  coordinate (C@Shoumon@Box@A)
-        -- ++(0,#4\width@KKran)  coordinate (D@Shoumon@Box@A);
+        -- ++(0,-#2\width@KKran) coordinate (B@Shoumon@Box@A)
+        -- ++(#1\width@KKran,0)  coordinate (C@Shoumon@Box@A)
+        -- ++(0,#2\width@KKran)  coordinate (D@Shoumon@Box@A);
 
   % 箱の描画
-  \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #4\width@KKran);
-  \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#3\width@KKran,0) -- ++ (0,- #4\width@KKran) -- ++ (-#3\width@KKran,0);
+  \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #2\width@KKran);
+  \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#1\width@KKran,0) -- ++ (0,- #2\width@KKran) -- ++ (-#1\width@KKran,0);
 
   % 文字列などの挿入用
   \node[overlay,anchor=center] at ($(A@Shoumon@Box@A)!0.5!(C@Shoumon@Box@A)$) {\centertext@Shoumon@Box@A};
@@ -113,25 +112,25 @@
   \node[overlay,anchor=south east] at (C@Shoumon@Box@A) {\setext@Shoumon@Box@A};
 
   % 座標の更新
-  \pgfmathparse{\mondai@position@tmp + #3}%
+  \pgfmathparse{\mondai@position@tmp + #1}%
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
 
 
-\NewDocumentCommand{\Shoumon@Box@B}{ O{.7pt} O{.35pt} m m }{% 小問（右が点線に）
-  \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #4\width@KKran);
-  \draw[line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#3\width@KKran,0);
-  \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #4\width@KKran);
-  \draw[line width=#1] (\mondai@position@tmp\width@KKran+#3\width@KKran,-\mondai@position@y@tmp\width@KKran- #4\width@KKran) -- ++ (-#3\width@KKran,0);
-  \pgfmathparse{\mondai@position@tmp + #3}%
+\NewDocumentCommand{\Shoumon@Box@B}{ m m }{% 小問（右が点線に）
+  \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #2\width@KKran);
+  \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#1\width@KKran,0);
+  \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran+#1\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #2\width@KKran);
+  \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran+#1\width@KKran,-\mondai@position@y@tmp\width@KKran- #2\width@KKran) -- ++ (-#1\width@KKran,0);
+  \pgfmathparse{\mondai@position@tmp + #1}%
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
 
 
 \newdimen\unit@KKran
 \unit@KKran=2\zw
-\NewDocumentCommand{\Shoumon@Grid@A}{ O{.7pt} O{.35pt} m O{#3}}{% 第３引数はmax、第４引数はmin
-    \def\grid@max@A{#3}\def\grid@min@A{#4}%
+\NewDocumentCommand{\Shoumon@Grid@A}{ m O{#1}}{% 第３引数はmax、第４引数はmin
+    \def\grid@max@A{#1}\def\grid@min@A{#2}%
     \ifnum\grid@max@A<\grid@min@A% 大小がおかしい時はerror
       \errmessage{Error: \grid@max@A (\the\grid@max@A) must be greater than or equal to \grid@min@A (\the\grid@min@A).}%
       \expandafter\endinput%
@@ -145,14 +144,14 @@
     \pgfmathtruncatemacro{\min@minus@amari@grid@min@A}{\grid@x@A-\amari@grid@min@A}%
 
     \ifnum\grid@min@A<\grid@x@A% minの方の描画
-      \draw[overlay,line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- (\mondai@position@tmp\width@KKran+\amari@grid@min@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran);
-      \draw[overlay,line width=#1] (\mondai@position@tmp\width@KKran+\amari@grid@min@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- (\mondai@position@tmp\width@KKran+\amari@grid@min@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@min@A\unit@KKran);
-      \draw[overlay,line width=#1] (\mondai@position@tmp\width@KKran+\amari@grid@min@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@min@A\unit@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);
+      \draw[overlay,line width=\waku@KKran] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- (\mondai@position@tmp\width@KKran+\amari@grid@min@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran);
+      \draw[overlay,line width=\waku@KKran] (\mondai@position@tmp\width@KKran+\amari@grid@min@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- (\mondai@position@tmp\width@KKran+\amari@grid@min@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@min@A\unit@KKran);
+      \draw[overlay,line width=\waku@KKran] (\mondai@position@tmp\width@KKran+\amari@grid@min@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@min@A\unit@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);
     \else
       \ifnum\amari@grid@min@A=0% 余り0の方
-        \draw[overlay,line width=#1] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@min@A\unit@KKran) -- (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@min@A\unit@KKran);
-        \draw[overlay,line width=#1] (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@min@A\unit@KKran) -- (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran);
-        \draw[overlay,line width=#1] (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);
+        \draw[overlay,line width=\waku@KKran] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@min@A\unit@KKran) -- (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@min@A\unit@KKran);
+        \draw[overlay,line width=\waku@KKran] (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@min@A\unit@KKran) -- (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran);
+        \draw[overlay,line width=\waku@KKran] (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);
 
       \else% 余り\neq0の方
         \coordinate (A@amari@non@zero) at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);%
@@ -162,19 +161,19 @@
         \coordinate (E@amari@non@zero) at (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@min@A\unit@KKran);%
         \coordinate (F@amari@non@zero) at (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran);%
 
-        \draw[overlay,line width=#1] (B@amari@non@zero) -- (C@amari@non@zero);
-        \draw[overlay,line width=#1] (C@amari@non@zero) -- (D@amari@non@zero);
-        \draw[overlay,line width=#1] (D@amari@non@zero) -- (E@amari@non@zero);
-        \draw[overlay,line width=#1] (E@amari@non@zero) -- (F@amari@non@zero);
-        \draw[overlay,line width=#1] (F@amari@non@zero) -- (A@amari@non@zero);
+        \draw[overlay,line width=\waku@KKran] (B@amari@non@zero) -- (C@amari@non@zero);
+        \draw[overlay,line width=\waku@KKran] (C@amari@non@zero) -- (D@amari@non@zero);
+        \draw[overlay,line width=\waku@KKran] (D@amari@non@zero) -- (E@amari@non@zero);
+        \draw[overlay,line width=\waku@KKran] (E@amari@non@zero) -- (F@amari@non@zero);
+        \draw[overlay,line width=\waku@KKran] (F@amari@non@zero) -- (A@amari@non@zero);
       \fi
     \fi
     
     \ifnum\grid@max@A<\grid@x@A% maxの方の描画
-      \draw[step=\unit@KKran,dashed,line width=#2] (\mondai@position@tmp\width@KKran+\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) grid (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@max@A\unit@KKran);% まずはマス目
+      \draw[step=\unit@KKran,dashed,line width=\tensenwaku@KKran] (\mondai@position@tmp\width@KKran+\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) grid (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@max@A\unit@KKran);% まずはマス目
 
-      \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off]  (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran);
-      \draw[line width=#1]
+      \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off]  (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran);
+      \draw[line width=\waku@KKran]
         (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- % 1. 底辺の始点 (左下の角)
         (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- % 2. 底辺の終点 (右下の角)
         (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@max@A\unit@KKran) -- % 3. 右の縦の辺 (右上の角)
@@ -190,20 +189,20 @@
 
         % 垂直線（左端除去）
         \foreach \x in {1,2,...,\grid@x@A} {
-          \draw[dashed,line width=#2]
+          \draw[dashed,line width=\tensenwaku@KKran]
             ($(P@amarizero) + (\x\unit@KKran,0)$)
             -- ++(0,-\shou@grid@max@A\unit@KKran);
         }
 
         % 水平線
         \foreach \y in {0,1,...,\amari@grid@max@A} {
-          \draw[dashed,line width=#2]
+          \draw[dashed,line width=\tensenwaku@KKran]
             ($(P@amarizero) + (0,-\y\unit@KKran)$)
             -- ++(\grid@x@A\unit@KKran,0);
         }
 
-        \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);
-        \draw[line width=#1]
+        \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);
+        \draw[line width=\waku@KKran]
           (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran) -- % 始点 A
           (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran) -- % 終点 B
           (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran) -- % 終点 C
@@ -219,30 +218,30 @@
 
         % 垂直線（左端除去）
         \foreach \x in {1,2,...,\amari@grid@max@A} {% 左ブロック
-          \draw[dashed,line width=#2]
+          \draw[dashed,line width=\tensenwaku@KKran]
             ($(A@amari@non@zero) + (\x\unit@KKran,0)$)
             -- ++(0,-\shou@grid@max@A\unit@KKran-\unit@KKran);
         }
         \foreach \x in {1,2,...,\max@minus@amari@grid@max@A} {% 右ブロック
-          \draw[dashed,line width=#2]
+          \draw[dashed,line width=\tensenwaku@KKran]
             ($(D@amari@non@zero) + (\x\unit@KKran,0)$)
             -- ++(0,\shou@grid@max@A\unit@KKran);
         }
 
         % 水平線
         \foreach \y in {0,1,...,\shou@grid@max@A} {% 左ブロック
-          \draw[dashed,line width=#2]
+          \draw[dashed,line width=\tensenwaku@KKran]
             ($(A@amari@non@zero) + (0,-\y\unit@KKran)$)
             -- ++(\amari@grid@max@A\unit@KKran,0);
         }
         \foreach \y in {0,1,...,\shou@grid@max@A} {% 右ブロック
-          \draw[dashed,line width=#2]
+          \draw[dashed,line width=\tensenwaku@KKran]
             ($(D@amari@non@zero) + (0,\y\unit@KKran)$)
             -- ++(\max@minus@amari@grid@max@A\unit@KKran,0);
         }
 
-        \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (A@amari@non@zero) -- (B@amari@non@zero);
-        \draw[line width=#1] (B@amari@non@zero) -- (C@amari@non@zero)
+        \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (A@amari@non@zero) -- (B@amari@non@zero);
+        \draw[line width=\waku@KKran] (B@amari@non@zero) -- (C@amari@non@zero)
         -- (D@amari@non@zero) -- (E@amari@non@zero) -- (F@amari@non@zero) -- (A@amari@non@zero);
       \fi
       \pgfmathparse{\mondai@position@tmp + \grid@x@A}%
@@ -250,16 +249,16 @@
     \fi
 }
 
-\NewDocumentCommand{\Shoumon@NonGrid@A}{ O{.7pt} O{.35pt} m}{% 第３引数はmax、第４引数はmin
-    \def\nongrid@max@A{#3}%
+\NewDocumentCommand{\Shoumon@NonGrid@A}{m}{% 第３引数はmax、第４引数はmin
+    \def\nongrid@max@A{#1}%
     \def\nongrid@x@A{20}% 可変にしてもいい
     \pgfmathtruncatemacro{\shou@nongrid@max@A}{\nongrid@max@A / \nongrid@x@A}%
     \pgfmathtruncatemacro{\amari@nongrid@max@A}{mod(\nongrid@max@A,\nongrid@x@A)}%
     \pgfmathtruncatemacro{\max@minus@amari@nongrid@max@A}{\nongrid@x@A-\amari@nongrid@max@A}%
 
     \ifnum\nongrid@max@A<\nongrid@x@A% maxの方の描画のみ
-      \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off]  (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran);
-      \draw[line width=#1]
+      \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off]  (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran);
+      \draw[line width=\waku@KKran]
         (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- % 1. 底辺の始点 (左下の角)
         (\mondai@position@tmp\width@KKran+\amari@nongrid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- % 2. 底辺の終点 (右下の角)
         (\mondai@position@tmp\width@KKran+\amari@nongrid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@nongrid@max@A\unit@KKran) -- % 3. 右の縦の辺 (右上の角)
@@ -275,13 +274,13 @@
 
         % 水平線
         \foreach \y in {0,1,...,\amari@nongrid@max@A} {
-          \draw[dashed,line width=#2]
+          \draw[dashed,line width=\tensenwaku@KKran]
             ($(P@amarizero) + (0,-\y\unit@KKran)$)
             -- ++(\nongrid@x@A\unit@KKran,0);
         }
 
-        \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@nongrid@max@A\unit@KKran);
-        \draw[line width=#1]
+        \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@nongrid@max@A\unit@KKran);
+        \draw[line width=\waku@KKran]
           (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@nongrid@max@A\unit@KKran) -- % 始点 A
           (\mondai@position@tmp\width@KKran+\nongrid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@nongrid@max@A\unit@KKran) -- % 終点 B
           (\mondai@position@tmp\width@KKran+\nongrid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran) -- % 終点 C
@@ -297,16 +296,16 @@
 
         % 水平線
         \foreach \y in {0,1,...,\shou@nongrid@max@A} {% 上ブロック
-          \draw[dashed,line width=#2]
+          \draw[dashed,line width=\tensenwaku@KKran]
             ($(A@amari@non@zero) + (0,-\y\unit@KKran)$)
             -- ++(\nongrid@x@A\unit@KKran,0);
         }
-        \draw[dashed,line width=#2]% 下ブロック
+        \draw[dashed,line width=\tensenwaku@KKran]% 下ブロック
           ($(D@amari@non@zero) + (0,\shou@nongrid@max@A\unit@KKran)$)
           -- ++(\max@minus@amari@nongrid@max@A\unit@KKran,0);
 
-        \draw[line width=#2, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (A@amari@non@zero) -- (B@amari@non@zero);
-        \draw[line width=#1] (B@amari@non@zero) -- (C@amari@non@zero)
+        \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (A@amari@non@zero) -- (B@amari@non@zero);
+        \draw[line width=\waku@KKran] (B@amari@non@zero) -- (C@amari@non@zero)
         -- (D@amari@non@zero) -- (E@amari@non@zero) -- (F@amari@non@zero) -- (A@amari@non@zero);
       \fi
       \pgfmathparse{\mondai@position@tmp + \nongrid@x@A}%
@@ -346,23 +345,23 @@
   }%
   
   % Shoumon@Box@A のパッチ
-  \RenewDocumentCommand{\Shoumon@Box@A}{ O{.7pt} O{.35pt} m m O{} }{%
+  \RenewDocumentCommand{\Shoumon@Box@A}{ m m O{} }{%
       \fill (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) 
-            rectangle ++(##3\width@KKran, -##4\width@KKran);%
-      \pgfmathparse{\mondai@position@tmp + ##3}%
+            rectangle ++(##1\width@KKran, -##2\width@KKran);%
+      \pgfmathparse{\mondai@position@tmp + ##1}%
       \edef\mondai@position@tmp{\pgfmathresult}%
     }%
-    \RenewDocumentCommand{\Shoumon@Box@B}{ O{.7pt} O{.35pt} m m O{} }{%
+    \RenewDocumentCommand{\Shoumon@Box@B}{ m m O{} }{%
       \fill (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) 
-            rectangle ++(##3\width@KKran, -##4\width@KKran);%
-      \pgfmathparse{\mondai@position@tmp + ##3}%
+            rectangle ++(##1\width@KKran, -##2\width@KKran);%
+      \pgfmathparse{\mondai@position@tmp + ##1}%
       \edef\mondai@position@tmp{\pgfmathresult}%
     }%
 
   % Shoumon@Grid@A/NonGrid@A
-  \RenewDocumentCommand{\Shoumon@Grid@A}{ O{.7pt} O{.35pt} m O{##3}}{%
+  \RenewDocumentCommand{\Shoumon@Grid@A}{ m O{##1}}{%
     % 必須: 元の座標計算ロジックを保持
-    \def\grid@max@A{##3}\def\grid@min@A{##4}%
+    \def\grid@max@A{##1}\def\grid@min@A{##2}%
     \def\grid@x@A{20}% 可変にしてもいい
     \pgfmathtruncatemacro{\shou@grid@max@A}{\grid@max@A / \grid@x@A}%
     \pgfmathtruncatemacro{\amari@grid@max@A}{mod(\grid@max@A,\grid@x@A)}%
@@ -396,9 +395,9 @@
       \fi
     \fi
   }
-  \RenewDocumentCommand{\Shoumon@NonGrid@A}{ O{.7pt} O{.35pt} m O{##3}}{%
+  \RenewDocumentCommand{\Shoumon@NonGrid@A}{ m O{##1}}{%
     % 必須: 元の座標計算ロジックを保持
-    \def\nongrid@max@A{##3}\def\nongrid@min@A{##4}% <-- grid を nongrid に変更
+    \def\nongrid@max@A{##1}\def\nongrid@min@A{##2}% <-- grid を nongrid に変更
     \def\nongrid@x@A{20}% 可変にしてもいい <-- grid を nongrid に変更
     \pgfmathtruncatemacro{\shou@nongrid@max@A}{\nongrid@max@A / \nongrid@x@A}% <-- grid を nongrid に変更
     \pgfmathtruncatemacro{\amari@nongrid@max@A}{mod(\nongrid@max@A,\nongrid@x@A)}% <-- grid を nongrid に変更

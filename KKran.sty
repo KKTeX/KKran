@@ -314,4 +314,160 @@
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
 
+% シルエット生成用パッチ 
+\newcommand{\BlockFillMode@KKran}{%
+  % 1. カウンターが進まないようにローカル化（または無効化）したいが、
+  %    位置計算に使うためそのまま走らせ、表示だけ消す戦略をとります。
+  
+  % 2. 各ボックス描画コマンドを「矩形塗りつぶし(\fill)」に再定義
+  %    ※位置計算(pgfmath...)はstyからコピーして維持します
+  
+  % \Daimon@Box@A@N のパッチ
+  \RenewDocumentCommand{\Daimon@Box@A@N}{ O{.7pt} m m }{%
+    \fill (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) 
+          rectangle ++(##2\width@KKran, -##3\width@KKran);%
+    \pgfmathparse{\mondai@position@tmp + \modai@bangou@wd}%
+    \edef\mondai@position@tmp{\pgfmathresult}%
+  }%
+  
+  % Shoumon@Box@A@N のパッチ
+  \RenewDocumentCommand{\Shoumon@Box@A@N}{ O{.7pt} O{.35pt} O{.5} m }{%
+    \fill (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) 
+          rectangle ++(##3\width@KKran, -##4\width@KKran);%
+    \pgfmathparse{\mondai@position@tmp + ##3}%
+    \edef\mondai@position@tmp{\pgfmathresult}%
+  }%
+  
+  % Shoumon@Box@A のパッチ
+  \RenewDocumentCommand{\Shoumon@Box@A}{ O{.7pt} O{.35pt} m m O{} }{%
+      \fill (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) 
+            rectangle ++(##3\width@KKran, -##4\width@KKran);%
+      \pgfmathparse{\mondai@position@tmp + ##3}%
+      \edef\mondai@position@tmp{\pgfmathresult}%
+    }%
+    \RenewDocumentCommand{\Shoumon@Box@B}{ O{.7pt} O{.35pt} m m O{} }{%
+      \fill (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) 
+            rectangle ++(##3\width@KKran, -##4\width@KKran);%
+      \pgfmathparse{\mondai@position@tmp + ##3}%
+      \edef\mondai@position@tmp{\pgfmathresult}%
+    }%
+
+  % Shoumon@Grid@A / NonGrid 
+  \RenewDocumentCommand{\Shoumon@Grid@A}{ O{.7pt} O{.35pt} m O{##3}}{%
+    % 必須: 元の座標計算ロジックを保持
+    \def\grid@max@A{##3}\def\grid@min@A{##4}%
+    \def\grid@x@A{20}% 可変にしてもいい
+    \pgfmathtruncatemacro{\shou@grid@max@A}{\grid@max@A / \grid@x@A}%
+    \pgfmathtruncatemacro{\amari@grid@max@A}{mod(\grid@max@A,\grid@x@A)}%
+    \pgfmathtruncatemacro{\max@minus@amari@grid@max@A}{\grid@x@A-\amari@grid@max@A}%
+    \pgfmathtruncatemacro{\shou@grid@min@A}{\grid@min@A / \grid@x@A}%
+    \pgfmathtruncatemacro{\amari@grid@min@A}{mod(\grid@min@A,\grid@x@A)}%
+    \pgfmathtruncatemacro{\min@minus@amari@grid@min@A}{\grid@x@A-\amari@grid@min@A}%
+    
+    \ifnum\grid@max@A<\grid@x@A
+      \fill
+      (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- % 1. 底辺の始点 (左下の角)
+      (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- % 2. 底辺の終点 (右下の角)
+      (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@max@A\unit@KKran) -- % 3. 右の縦の辺 (右上の角)
+      (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@max@A\unit@KKran) -- cycle; % 4. 上辺の終点 (左上の角)
+    \else
+      \ifnum\amari@grid@max@A=0
+        \fill
+          (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran) -- % 始点 A
+          (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran) -- % 終点 B
+          (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran) -- % 終点 C
+          (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- cycle; % 終点 D
+      \else
+        \coordinate (A@amari@non@zero) at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);%
+        \coordinate (B@amari@non@zero) at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran-\unit@KKran);%
+        \coordinate (C@amari@non@zero) at (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran-\unit@KKran);%
+        \coordinate (D@amari@non@zero) at (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);%
+        \coordinate (E@amari@non@zero) at (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@grid@max@A\unit@KKran);%
+        \coordinate (F@amari@non@zero) at (\mondai@position@tmp\width@KKran+\grid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran);%
+        \fill (B@amari@non@zero) -- (C@amari@non@zero)
+        -- (D@amari@non@zero) -- (E@amari@non@zero) -- (F@amari@non@zero) -- (A@amari@non@zero) -- cycle;
+      \fi
+    \fi
+  }
+  \RenewDocumentCommand{\Shoumon@NonGrid@A}{ O{.7pt} O{.35pt} m O{##3}}{%
+    % 必須: 元の座標計算ロジックを保持
+    \def\nongrid@max@A{##3}\def\nongrid@min@A{##4}% <-- grid を nongrid に変更
+    \def\nongrid@x@A{20}% 可変にしてもいい <-- grid を nongrid に変更
+    \pgfmathtruncatemacro{\shou@nongrid@max@A}{\nongrid@max@A / \nongrid@x@A}% <-- grid を nongrid に変更
+    \pgfmathtruncatemacro{\amari@nongrid@max@A}{mod(\nongrid@max@A,\nongrid@x@A)}% <-- grid を nongrid に変更
+    \pgfmathtruncatemacro{\max@minus@amari@nongrid@max@A}{\nongrid@x@A-\amari@nongrid@max@A}% <-- grid を nongrid に変更
+    \pgfmathtruncatemacro{\shou@nongrid@min@A}{\nongrid@min@A / \nongrid@x@A}% <-- grid を nongrid に変更
+    \pgfmathtruncatemacro{\amari@nongrid@min@A}{mod(\nongrid@min@A,\nongrid@x@A)}% <-- grid を nongrid に変更
+    \pgfmathtruncatemacro{\min@minus@amari@nongrid@min@A}{\nongrid@x@A-\amari@nongrid@min@A}% <-- grid を nongrid に変更
+    
+    \ifnum\nongrid@max@A<\nongrid@x@A
+      \fill
+      (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- % 1. 底辺の始点 (左下の角)
+      (\mondai@position@tmp\width@KKran+\amari@nongrid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- % 2. 底辺の終点 (右下の角)
+      (\mondai@position@tmp\width@KKran+\amari@nongrid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@nongrid@max@A\unit@KKran) -- % 3. 右の縦の辺 (右上の角)
+      (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran+\shou@nongrid@max@A\unit@KKran) -- cycle; % 4. 上辺の終点 (左上の角)
+      
+      % 必須: 座標更新ロジックの保持 (Case 1)
+      \pgfmathparse{\mondai@position@tmp + \nongrid@max@A}%
+      \edef\mondai@position@tmp{\pgfmathresult}%
+    \else
+      \ifnum\amari@nongrid@max@A=0
+        \fill
+          (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@nongrid@max@A\unit@KKran) -- % 始点 A
+          (\mondai@position@tmp\width@KKran+\nongrid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@nongrid@max@A\unit@KKran) -- % 終点 B
+          (\mondai@position@tmp\width@KKran+\nongrid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran) -- % 終点 C
+          (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- cycle; % 終点 D
+
+        % 必須: 座標更新ロジックの保持 (Case 2)
+        \pgfmathparse{\mondai@position@tmp + \nongrid@x@A}%
+        \edef\mondai@position@tmp{\pgfmathresult}%
+      \else
+        \coordinate (A@amari@non@zero) at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);%
+        \coordinate (B@amari@non@zero) at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\shou@nongrid@max@A\unit@KKran-\unit@KKran);%
+        \coordinate (C@amari@non@zero) at (\mondai@position@tmp\width@KKran+\amari@nongrid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@nongrid@max@A\unit@KKran-\unit@KKran);%
+        \coordinate (D@amari@non@zero) at (\mondai@position@tmp\width@KKran+\amari@nongrid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@nongrid@max@A\unit@KKran);%
+        \coordinate (E@amari@non@zero) at (\mondai@position@tmp\width@KKran+\nongrid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@nongrid@max@A\unit@KKran);%
+        \coordinate (F@amari@non@zero) at (\mondai@position@tmp\width@KKran+\nongrid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran);%
+        \fill (B@amari@non@zero) -- (C@amari@non@zero)
+        -- (D@amari@non@zero) -- (E@amari@non@zero) -- (F@amari@non@zero) -- (A@amari@non@zero) -- cycle;
+
+        % 必須: 座標更新ロジックの保持 (Case 3)
+        \pgfmathparse{\mondai@position@tmp + \nongrid@x@A}%
+        \edef\mondai@position@tmp{\pgfmathresult}%
+      \fi
+    \fi
+  }
+}
+
+\NewDocumentCommand{\KKran}{ O{2pt} m }{%
+  % 描画内容をマクロとして定義（3回使い回すため）
+  \def\byouga@KKran{%
+    #2
+  }
+  \begin{tikzpicture}
+    % 1. 黒の太線シルエット（背景）
+    %    BlockFillModeでコマンドを「塗りつぶし」に変え、カウンターをリセットしてから描画
+    \begin{scope}[line width=#1, line join=round] 
+      \BlockFillMode@KKran
+      % fillだけでなくdrawも行うことで外側に太らせる
+      \tikzset{every path/.style={draw=black, fill=black}} 
+      \byouga@KKran
+    \end{scope}
+
+    % 2. 白のシルエット（中抜き用）
+    %    線の太さを0にして、純粋な形状だけで黒い塊の内側をくり抜く
+    \begin{scope}
+      \BlockFillMode@KKran
+      \tikzset{every path/.style={fill=white, draw=none}}
+      \byouga@KKran
+    \end{scope}
+
+    % 3. 本番の描画（前面）
+    %    ここは通常のコマンド動作（線画）
+    \begin{scope}
+      \byouga@KKran
+    \end{scope}
+  \end{tikzpicture}
+}
+
 \endinput

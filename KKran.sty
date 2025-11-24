@@ -2,18 +2,28 @@
 \ProvidesPackage{KKran}[2025/11/23, Version 1.0.0]
 \RequirePackage{calc}
 \RequirePackage{tikz}
+\RequirePackage{xcolor}
 \RequirePackage{KKsymbols} % 問題番号、\ichimojiへの対応のために必須。
 \usetikzlibrary{shapes}
 \usetikzlibrary{calc}
+\RequirePackage{kvoptions} 
 
-% 最終的には表組みへの応用も。
+\SetupKeyvalOptions{%
+  family=kkran,%
+  prefix=kkran@%
+}
+\DeclareStringOption[1]{kaitouhyouji}
+\ProcessKeyvalOptions*
 
 \def\kaitouhyouji@or@not@KKran{1}% opで切り替え可能にしとくこと
 \NewDocumentCommand{\KaitouInput}{m}{%
-  \ifnum\number\kaitouhyouji@or@not@KKran=1
+  \ifnum\number\kkran@kaitouhyouji=1
     {\color{red}#1}%
-    \ifnum\number\kaitouhyouji@or@not@KKran=0
+  \else
+    \ifnum\number\kkran@kaitouhyouji=0
       {\color{white}#1}%
+    \else
+      \errmessage{Error: kaitouhyouji option requires to be 0 or 1.}%
     \fi%
   \fi%
 }
@@ -199,7 +209,6 @@
     \def\grid@max@A{#1}\def\grid@min@A{#2}%
     \ifnum\grid@max@A<\grid@min@A% 大小がおかしい時はerror
       \errmessage{Error: \grid@max@A (\the\grid@max@A) must be greater than or equal to \grid@min@A (\the\grid@min@A).}%
-      \expandafter\endinput%
     \fi%
     \def\grid@x@A{20}% 可変にしてもいい
     \pgfmathtruncatemacro{\shou@grid@max@A}{\grid@max@A / \grid@x@A}%

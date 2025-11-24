@@ -121,11 +121,62 @@
 }
 
 
-\NewDocumentCommand{\Shoumon@Box@B}{ m m }{% 小問（右が点線に）
+
+\define@key{Shoumon@Box@B}{west}{%
+  \def\westtext@Shoumon@Box@B{#1}%
+}
+\define@key{Shoumon@Box@B}{center}{%
+  \def\centertext@Shoumon@Box@B{#1}%
+}
+\define@key{Shoumon@Box@B}{east}{%
+  \def\easttext@Shoumon@Box@B{#1}%
+}
+\define@key{Shoumon@Box@B}{north west}{%
+  \def\nwtext@Shoumon@Box@B{#1}%
+}
+\define@key{Shoumon@Box@B}{north east}{%
+  \def\netext@Shoumon@Box@B{#1}%
+}
+\define@key{Shoumon@Box@B}{south west}{%
+  \def\swtext@Shoumon@Box@B{#1}%
+}
+\define@key{Shoumon@Box@B}{south east}{%
+  \def\setext@Shoumon@Box@B{#1}%
+}
+\NewDocumentCommand{\reset@Shoumon@Box@B}{}{%
+  \def\westtext@Shoumon@Box@B{}%
+  \def\centertext@Shoumon@Box@B{}%
+  \def\easttext@Shoumon@Box@B{}%
+  \def\nwtext@Shoumon@Box@B{}%
+  \def\netext@Shoumon@Box@B{}%
+  \def\swtext@Shoumon@Box@B{}%
+  \def\setext@Shoumon@Box@B{}%
+}
+\NewDocumentCommand{\Shoumon@Box@B}{ m m O{} }{% 小問（右が点線に）
+  \reset@Shoumon@Box@B\setkeys{Shoumon@Box@B}{#3}%
+
+  % 左上から反時計回りに A, B, C, D を定義
+  \path (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) coordinate (A@Shoumon@Box@B)
+        -- ++(0,-#2\width@KKran) coordinate (B@Shoumon@Box@B)
+        -- ++(#1\width@KKran,0)  coordinate (C@Shoumon@Box@B)
+        -- ++(0,#2\width@KKran)  coordinate (D@Shoumon@Box@B);
+
+  % 箱の描画
   \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #2\width@KKran);
   \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#1\width@KKran,0);
   \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran+#1\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #2\width@KKran);
   \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran+#1\width@KKran,-\mondai@position@y@tmp\width@KKran- #2\width@KKran) -- ++ (-#1\width@KKran,0);
+
+  % 文字列などの挿入用
+  \node[overlay,anchor=center] at ($(A@Shoumon@Box@B)!0.5!(C@Shoumon@Box@B)$) {\centertext@Shoumon@Box@B};
+  \node[overlay,anchor=west] at ($(A@Shoumon@Box@B)!0.5!(B@Shoumon@Box@B)$) {\westtext@Shoumon@Box@B};
+  \node[overlay,anchor=east] at ($(C@Shoumon@Box@B)!0.5!(D@Shoumon@Box@B)$) {\easttext@Shoumon@Box@B};
+  \node[overlay,anchor=north west] at (A@Shoumon@Box@B) {\nwtext@Shoumon@Box@B};
+  \node[overlay,anchor=north east] at (D@Shoumon@Box@B) {\netext@Shoumon@Box@B};
+  \node[overlay,anchor=south west] at (B@Shoumon@Box@B) {\swtext@Shoumon@Box@B};
+  \node[overlay,anchor=south east] at (C@Shoumon@Box@B) {\setext@Shoumon@Box@B};
+
+  % 座標の更新
   \pgfmathparse{\mondai@position@tmp + #1}%
   \edef\mondai@position@tmp{\pgfmathresult}%
 }

@@ -2,7 +2,7 @@
 \ProvidesPackage{KKran}[2025/11/23, Version 1.0.0]
 \RequirePackage{calc}
 \RequirePackage{tikz}
-\RequirePackage{KKsymbols}
+\RequirePackage{KKsymbols} % 問題番号、\ichimojiへの対応のために必須。
 \usetikzlibrary{shapes}
 \usetikzlibrary{calc}
 
@@ -321,7 +321,7 @@
     \fi
 }
 
-\NewDocumentCommand{\Shoumon@NonGrid@A}{m}{% 第３引数はmax、第４引数はmin
+\NewDocumentCommand{\Shoumon@NonGrid@A}{ m O{} }{%
     \def\nongrid@max@A{#1}%
     \def\nongrid@x@A{20}% 可変にしてもいい
     \pgfmathtruncatemacro{\shou@nongrid@max@A}{\nongrid@max@A / \nongrid@x@A}%
@@ -335,6 +335,8 @@
         (\mondai@position@tmp\width@KKran+\amari@nongrid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) -- % 2. 底辺の終点 (右下の角)
         (\mondai@position@tmp\width@KKran+\amari@nongrid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@nongrid@max@A\unit@KKran) -- % 3. 右の縦の辺 (右上の角)
         (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran+\shou@nongrid@max@A\unit@KKran); % 4. 上辺の終点 (左上の角)
+
+      \node[anchor=north west,inner sep=0pt] at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran+\shou@nongrid@max@A\unit@KKran) {\masume@text@KKran{#2}};% 最後に文字
 
       \pgfmathparse{\mondai@position@tmp + \nongrid@max@A}%
       \edef\mondai@position@tmp{\pgfmathresult}%
@@ -357,6 +359,8 @@
           (\mondai@position@tmp\width@KKran+\nongrid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran-\shou@nongrid@max@A\unit@KKran) -- % 終点 B
           (\mondai@position@tmp\width@KKran+\nongrid@x@A\unit@KKran,-\mondai@position@y@tmp\width@KKran) -- % 終点 C
           (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran); % 終点 D
+        
+        \node[anchor=north west,inner sep=0pt] at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) {\parbox{\nongrid@x@A\unit@KKran}{\masume@text@KKran{#2}}};% 最後に文字
 
       \else% 余り\neq0の方
         \coordinate (A@amari@non@zero) at (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran);%
@@ -379,6 +383,8 @@
         \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (A@amari@non@zero) -- (B@amari@non@zero);
         \draw[line width=\waku@KKran] (B@amari@non@zero) -- (C@amari@non@zero)
         -- (D@amari@non@zero) -- (E@amari@non@zero) -- (F@amari@non@zero) -- (A@amari@non@zero);
+
+        \node[anchor=north west,inner sep=0pt] at (A@amari@non@zero) {\parbox{\nongrid@x@A\unit@KKran}{\masume@text@KKran{#2}}};% 最後に文字
       \fi
       \pgfmathparse{\mondai@position@tmp + \nongrid@x@A}%
       \edef\mondai@position@tmp{\pgfmathresult}%
@@ -466,15 +472,12 @@
       \fi
     \fi
   }
-  \RenewDocumentCommand{\Shoumon@NonGrid@A}{ m O{##1}}{%
-    \def\nongrid@max@A{##1}\def\nongrid@min@A{##2}% 
+  \RenewDocumentCommand{\Shoumon@NonGrid@A}{ m O{}}{%
+    \def\nongrid@max@A{##1}
     \def\nongrid@x@A{20}% 可変にしてもいい
     \pgfmathtruncatemacro{\shou@nongrid@max@A}{\nongrid@max@A / \nongrid@x@A}% 
     \pgfmathtruncatemacro{\amari@nongrid@max@A}{mod(\nongrid@max@A,\nongrid@x@A)}% <-- grid を nongrid に変更
     \pgfmathtruncatemacro{\max@minus@amari@nongrid@max@A}{\nongrid@x@A-\amari@nongrid@max@A}% 
-    \pgfmathtruncatemacro{\shou@nongrid@min@A}{\nongrid@min@A / \nongrid@x@A}% 
-    \pgfmathtruncatemacro{\amari@nongrid@min@A}{mod(\nongrid@min@A,\nongrid@x@A)}% 
-    \pgfmathtruncatemacro{\min@minus@amari@nongrid@min@A}{\nongrid@x@A-\amari@nongrid@min@A}% 
     
     \ifnum\nongrid@max@A<\nongrid@x@A
       \fill

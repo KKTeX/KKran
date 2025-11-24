@@ -35,6 +35,10 @@
 \newcount\NUM@mondai
 \newcount\NUM@shoumon
 
+
+% 番号を手動で指定できるように、第３opを追加（未）
+% 手動指定した場合は\advance\NUM@mondai by 1を無効に
+
 \NewDocumentCommand{\Daimon@Box@A@N}{ O{.5} m }{% 大問番号
   \global\advance\NUM@mondai by 1%
   \global\def\modai@bangou@wd{#1}%

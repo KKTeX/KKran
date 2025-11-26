@@ -20,7 +20,6 @@
 \DeclareStringOption[2\zw]{unit}
 \ProcessKeyvalOptions*
 
-\def\kaitouhyouji@or@not@KKran{1}% opで切り替え可能にしとくこと
 \NewDocumentCommand{\KaitouInput}{m}{%
   \ifnum\number\kkran@kaitouhyouji=1
     {\color{\kkran@kaitoucolor}#1}%

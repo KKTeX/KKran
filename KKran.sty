@@ -560,8 +560,146 @@
   }
 }
 
+\ExplSyntaxOn
+% アルファベット
+\seq_set_split:Nnn \g_alphabet_lower_seq {} {abcdefghijklmnopqrstuvwxyz}
+\seq_set_split:Nnn \g_alphabet_upper_seq {} {ABCDEFGHIJKLMNOPQRSTUVWXYZ}
+\NewDocumentCommand{\alphabetarray}{ s m }{%
+  \IfBooleanTF{#1}
+    {\seq_item:Nn \g_alphabet_upper_seq {#2}} % *あり：大文字
+    {\seq_item:Nn \g_alphabet_lower_seq {#2}} % *なし：小文字
+}
+% ローマ数字
+\NewDocumentCommand{\Rrnum}{ s m }{%
+  \IfBooleanTF{#1}{\uppercase\expandafter{\romannumeral#2}}{\romannumeral#2}%
+}
+% 50音 
+\seq_set_split:Nnn \g_gojyuon_hira_seq {} {あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをん}
+\seq_set_split:Nnn \g_gojyuon_kata_seq {} {アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン}
+\NewDocumentCommand{\gojyuon}{ s m }{%
+  \IfBooleanTF{#1}{\seq_item:Nn \g_gojyuon_kata_seq {#2}} {\seq_item:Nn \g_gojyuon_hira_seq {#2}}
+}
+% いろはうた
+\seq_set_split:Nnn \g_iroha_seq {}{いろはにほへとちりぬるをわかよたれそつねならむうゐのおくやまけふこえてあさきゆめみしゑひもせす}
+\seq_set_split:Nnn \g_irohakata_seq {}{イロハニホヘトチリヌルヲワカヨタレソツネナラムウヰノオクヤマケフコエテアサキユメミシヱヒモセス
+}
+\NewDocumentCommand{\iroha}{ s m }{%
+  \IfBooleanTF{#1}{\seq_item:Nn \g_irohakata_seq {#2}}{\seq_item:Nn \g_iroha_seq {#2}}
+}
+% 漢数字
+\int_new:N \wabunkansuji_tmpa_int
+\int_new:N \wabunkansuji_tmpb_int
+\int_new:N \wabunkansuji_tmpc_int
 
-\NewDocumentCommand{\KKran}{ O{2pt} m }{%
+\cs_new:Npn \wabunkansuji_one:n #1
+ {
+   \int_case:nnF {#1}
+    { {1}{一}{2}{二}{3}{三}{4}{四}{5}{五}{6}{六}{7}{七}{8}{八}{9}{九} }{}
+ }
+
+\cs_new:Npn \wabunkansuji_main:n #1
+ {
+   \int_compare:nNnTF {#1} = {0} {零}
+   {
+     \int_compare:nNnTF {#1} = {10000} {一万}
+     {
+       % 万の位
+       \int_set:Nn \wabunkansuji_tmpa_int { \int_div_truncate:nn {#1} {10000} }
+       \int_set:Nn \wabunkansuji_tmpb_int { #1 - \wabunkansuji_tmpa_int * 10000 }
+
+       \int_compare:nNnTF \wabunkansuji_tmpa_int > 0
+         { \wabunkansuji_one:n{\wabunkansuji_tmpa_int}万 }{}
+
+       % 千の位
+       \int_set:Nn \wabunkansuji_tmpa_int { \int_div_truncate:nn \wabunkansuji_tmpb_int {1000} }
+       \int_set:Nn \wabunkansuji_tmpc_int { \wabunkansuji_tmpb_int - \wabunkansuji_tmpa_int * 1000 }
+       \int_compare:nNnTF \wabunkansuji_tmpa_int = 0 {} 
+         { \int_compare:nNnTF \wabunkansuji_tmpa_int = 1 {千}{\wabunkansuji_one:n{\wabunkansuji_tmpa_int}千} }
+
+       % 百の位
+       \int_set:Nn \wabunkansuji_tmpa_int { \int_div_truncate:nn \wabunkansuji_tmpc_int {100} }
+       \int_set:Nn \wabunkansuji_tmpb_int { \wabunkansuji_tmpc_int - \wabunkansuji_tmpa_int * 100 }
+       \int_compare:nNnTF \wabunkansuji_tmpa_int = 0 {} 
+         { \int_compare:nNnTF \wabunkansuji_tmpa_int = 1 {百}{\wabunkansuji_one:n{\wabunkansuji_tmpa_int}百} }
+
+       % 十の位
+       \int_set:Nn \wabunkansuji_tmpa_int { \int_div_truncate:nn \wabunkansuji_tmpb_int {10} }
+       \int_set:Nn \wabunkansuji_tmpc_int { \wabunkansuji_tmpb_int - \wabunkansuji_tmpa_int * 10 }
+       \int_compare:nNnTF \wabunkansuji_tmpa_int = 0 {} 
+         { \int_compare:nNnTF \wabunkansuji_tmpa_int = 1 {十}{\wabunkansuji_one:n{\wabunkansuji_tmpa_int}十} }
+
+       % 一の位
+       \int_compare:nNnTF \wabunkansuji_tmpc_int = 0 {} {\wabunkansuji_one:n{\wabunkansuji_tmpc_int}}
+     }
+   }
+ }
+\NewDocumentCommand{\wabunkansuji}{ m }{\wabunkansuji_main:n{#1}}
+\ExplSyntaxOff
+
+\pgfkeys{
+  /KKran/.is family, /KKran/.cd,
+  daimon/.is choice, 
+  daimon/a/.code={%
+    \def\how@to@count@daimon@bangou{\slowcare{\alphabetarray{\number\NUM@mondai}}}%
+  },
+  daimon/A/.code={%
+    \def\how@to@count@daimon@bangou{\alphabetarray*{\number\NUM@mondai}}%
+  },
+  daimon/あ/.code={%
+    \def\how@to@count@daimon@bangou{\RevBangou{\gojyuon{\number\NUM@mondai}}}%
+  },
+  daimon/ア/.code={%
+    \def\how@to@count@daimon@bangou{\RevBangou{\gojyuon*{\number\NUM@mondai}}}%
+  },
+  daimon/いろは/.code={%
+    \def\how@to@count@daimon@bangou{\RevBangou{\iroha{\number\NUM@mondai}}}%
+  },
+  daimon/イロハ/.code={%
+    \def\how@to@count@daimon@bangou{\RevBangou{\iroha*{\number\NUM@mondai}}}%
+  },
+  daimon/一/.code={%
+    \def\how@to@count@daimon@bangou{\RevBangou{\wabunkansuji{\number\NUM@mondai}}}%
+  },
+  daimon/ロ小/.code={%
+    \def\how@to@count@daimon@bangou{\Rrnum{\number\NUM@mondai}}%
+  },
+  daimon/ロ大/.code={%
+    \def\how@to@count@daimon@bangou{\Rrnum*{\number\NUM@mondai}}%
+  },
+  shoumon/.is choice, 
+  shoumon/a/.code={%
+    \def\how@to@count@shoumon@bangou{\slowcare{\alphabetarray{\number\NUM@shoumon}}}%
+  },
+  shoumon/A/.code={%
+    \def\how@to@count@shoumon@bangou{\alphabetarray*{\number\NUM@shoumon}}%
+  },
+  shoumon/あ/.code={%
+    \def\how@to@count@shoumon@bangou{\RevBangou{\gojyuon{\number\NUM@shoumon}}}%
+  },
+  shoumon/ア/.code={%
+    \def\how@to@count@shoumon@bangou{\RevBangou{\gojyuon*{\number\NUM@shoumon}}}%
+  },
+  shoumon/いろは/.code={%
+    \def\how@to@count@shoumon@bangou{\RevBangou{\iroha{\number\NUM@shoumon}}}%
+  },
+  shoumon/イロハ/.code={%
+    \def\how@to@count@shoumon@bangou{\RevBangou{\iroha*{\number\NUM@shoumon}}}%
+  },
+  shoumon/一/.code={%
+    \def\how@to@count@shoumon@bangou{\RevBangou{\wabunkansuji{\number\NUM@shoumon}}}%
+  },
+  shoumon/ロ小/.code={%
+    \def\how@to@count@shoumon@bangou{\Rrnum{\number\NUM@shoumon}}%
+  },
+  shoumon/ロ大/.code={%
+    \def\how@to@count@shoumon@bangou{\Rrnum*{\number\NUM@shoumon}}%
+  },
+}
+\NewDocumentCommand{\KKran}{ O{2pt} m O{} }{%
+\begingroup%
+  % 第3引数(#3)のキー設定を適用
+    \pgfkeys{/KKran/.cd, #3}%
+
   % 描画内容をマクロとして定義（３回使い回す）
   \def\byouga@KKran{%
     #2%
@@ -589,6 +727,7 @@
       \byouga@KKran
     \end{scope}
   \end{tikzpicture}
+\endgroup%
 }
 
 \endinput

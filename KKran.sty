@@ -13,6 +13,7 @@
   prefix=kkran@%
 }
 \DeclareStringOption[1]{kaitouhyouji}
+\DeclareStringOption[red]{kaitoucolor}
 \DeclareStringOption[20]{gridmax}
 \DeclareStringOption[20]{nongridmax}
 \DeclareStringOption[2\zw]{unit}
@@ -21,7 +22,7 @@
 \def\kaitouhyouji@or@not@KKran{1}% opで切り替え可能にしとくこと
 \NewDocumentCommand{\KaitouInput}{m}{%
   \ifnum\number\kkran@kaitouhyouji=1
-    {\color{red}#1}%
+    {\color{\kkran@kaitoucolor}#1}%
   \else
     \ifnum\number\kkran@kaitouhyouji=0
       {\color{white}#1}%
@@ -48,10 +49,6 @@
 \newcount\NUM@mondai
 \newcount\NUM@shoumon
 
-
-
-% 番号を手動で指定できるように、第３opを追加（未）
-% 手動指定した場合は\advance\NUM@mondai by 1を無効に
 
 % 縦書きの時のみ仕様\kakko{\RevBangou{あ}}みたいに
 \NewDocumentCommand{\RevBangou}{m}{\rotatebox[origin=c]{-90}{#1}} 

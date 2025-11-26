@@ -13,6 +13,9 @@
   prefix=kkran@%
 }
 \DeclareStringOption[1]{kaitouhyouji}
+\DeclareStringOption[20]{gridmax}
+\DeclareStringOption[20]{nongridmax}
+\DeclareStringOption[2\zw]{unit}
 \ProcessKeyvalOptions*
 
 \def\kaitouhyouji@or@not@KKran{1}% opで切り替え可能にしとくこと
@@ -29,7 +32,7 @@
 }
 
 \newdimen\width@KKran
-\width@KKran=2\zw
+\width@KKran=\kkran@unit
 
 \newdimen\waku@KKran \waku@KKran=.7pt
 \newdimen\tensenwaku@KKran \tensenwaku@KKran =.35pt
@@ -240,13 +243,13 @@
   \endgroup%
 }
 \newdimen\unit@KKran
-\unit@KKran=2\zw
+\unit@KKran=\kkran@unit
 \NewDocumentCommand{\Shoumon@Grid@A}{ m O{#1} O{} }{% 第３引数はmax、第４引数はmin
     \def\grid@max@A{#1}\def\grid@min@A{#2}%
     \ifnum\grid@max@A<\grid@min@A% 大小がおかしい時はerror
       \errmessage{Error: \grid@max@A (\the\grid@max@A) must be greater than or equal to \grid@min@A (\the\grid@min@A).}%
     \fi%
-    \def\grid@x@A{20}% 可変にしてもいい
+    \def\grid@x@A{\kkran@gridmax}% 可変にしてもいい
     \pgfmathtruncatemacro{\shou@grid@max@A}{\grid@max@A / \grid@x@A}%
     \pgfmathtruncatemacro{\amari@grid@max@A}{mod(\grid@max@A,\grid@x@A)}%
     \pgfmathtruncatemacro{\max@minus@amari@grid@max@A}{\grid@x@A-\amari@grid@max@A}%
@@ -484,7 +487,7 @@
   % Shoumon@Grid@A/NonGrid@A
   \RenewDocumentCommand{\Shoumon@Grid@A}{ m O{##1} O{}}{%
     \def\grid@max@A{##1}\def\grid@min@A{##2}%
-    \def\grid@x@A{20}% 可変にしてもいい
+    \def\grid@x@A{\kkran@gridmax}% 可変にしてもいい
     \pgfmathtruncatemacro{\shou@grid@max@A}{\grid@max@A / \grid@x@A}%
     \pgfmathtruncatemacro{\amari@grid@max@A}{mod(\grid@max@A,\grid@x@A)}%
     \pgfmathtruncatemacro{\max@minus@amari@grid@max@A}{\grid@x@A-\amari@grid@max@A}%
@@ -729,5 +732,14 @@
   \end{tikzpicture}
 \endgroup%
 }
+
+
+% 名前をユーザー用に切り替え
+\let\大問番号\Daimon@Box@A@N
+\let\小問番号\Shoumon@Box@A@N
+\let\小問欄\Shoumon@Box@A
+\let\小問中欄\Shoumon@Box@B
+\let\小問マス目\Shoumon@Grid@A
+\let\小問記述\Shoumon@NonGrid@A
 
 \endinput

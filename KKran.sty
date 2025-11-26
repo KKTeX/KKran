@@ -742,4 +742,43 @@
 \let\小問マス目\Shoumon@Grid@A
 \let\小問記述\Shoumon@NonGrid@A
 
+
+% マークシート
+% ひとまずKKsymbolsの書き方で楕円を作る
+\newlength{\oval@boxwidth}
+\newlength{\oval@textwidth}
+\newlength{\oval@textheight}
+\newcommand{\VerticalAdjustOval}{%
+  \ifnum\ltjgetparameter{direction}=3
+    -0.17ex % 縦組
+  \else
+    0.19ex  % 横組
+  \fi
+}
+\DeclareRobustCommand{\kyouteoval}[1]{%
+  \settowidth{\oval@textwidth}{#1}%
+  \settoheight{\oval@textheight}{#1}%
+  \setlength{\oval@boxwidth}{\f@size pt}%
+  \ltjghostbeforejachar%
+  \vphantom{羅}\raisebox{\VerticalAdjustOval}{%
+    \hbox to \oval@boxwidth{%
+      \hss
+      \tikz[baseline=(char.base)]{%
+        \node[
+          shape=ellipse,
+          line width=0.15ex,  
+          minimum height=.9\oval@boxwidth, 
+          minimum width=.55\oval@boxwidth, 
+          draw,
+          inner sep=0pt
+        ] (char){%
+          \raisebox{0.165ex}{\scalebox{0.6}{\vphantom{羅}\makebox[.75\oval@boxwidth][c]{\maybescale{\oval@textwidth}{.6\oval@boxwidth}{\maybescaleV{\oval@textheight}{1.03\oval@boxwidth}{#1}}}}}% 
+        };
+      }%
+      \hss
+    }%
+  }%
+  \ltjghostafterjachar
+}
+
 \endinput

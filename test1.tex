@@ -1,19 +1,56 @@
 \documentclass{jlreq}
 
-
-\usepackage[T1]{fontenc}
-\usepackage[kaitouhyouji=1,gridmax=20,kaitoucolor=blue]{KKran}
-
+\usepackage[kaitouhyouji=1,gridmax=20,kaitoucolor=red,unit=8mm]{KKran}
+\usepackage{pgfplots}
 
 \begin{document}
 \KKran[3pt]{%
   \大問番号[1]{9}
   \小問番号{2}\小問欄{2}{2}[center=\KaitouInput{ア}]\小問番号{2}\小問中欄{5}{2}[west=人物：,center=\KaitouInput{松尾},east=芭蕉]\小問欄{6}{2}[west=作品：,center=\KaitouInput{奥の細道}]\GoDown{2}
   \小問番号{2}\小問欄{4}{2}[center=\KaitouInput{つわもの}]\小問番号{2}\小問欄{2}{2}[center=\KaitouInput{ウ}]\小問番号{2}\小問欄{2}{2}[center=\KaitouInput{エ}]\小問番号{2}\小問欄{4}{2}[center=\KaitouInput{片雲の風}]\小問番号{2}\小問欄{7}{2}[center=\KaitouInput{春夜宴桃李園序}]\GoDown{2}
-  \小問番号{4}\小問マス目[45]{65}[\KaitouInput{李白の著名な詩を元にした\ichimoji{「}月日は百代の過客\ichimoji{」}という表現を引いて旅に主題を仄めかしつつ、滑らかにに自身の紀行文に主眼を移す役割。}]\GoDown{4}
+  \小問番号{4}\小問マス目[45]{65}[\KaitouInput{李白の著名な詩を元にした\ichimoji{「}月日は百代の過客\ichimoji{」}という表現を引いて旅に主題を仄めかしつつ\ichimoji{、}滑らかにに自身の紀行文に主眼を移す役割\ichimoji{。}}]\GoDown{4}
   \小問番号{1}\小問マス目{7}[\KaitouInput{道祖神の招き}]
 }[shoumon=いろは,daimon=ア]
 
+\KKran{%
+    \小問番号{2}\小問欄{3}{2}\小問番号{2}\小問欄{4}{2}[south east={$\mathrm{mm}$}, west={$x=$}]
+  }
+
+\KKran{%
+  \小問番号{5}\小問欄{8}{5}[center={\KaitouInput{%
+      \begin{tikzpicture}
+        \draw[domain=-1.5:1.5, samples=100, thick] plot (\x, {\x*\x});
+        \draw[->] (0, -.3) -- (0, 2.5) node[above] {$y$};
+        \draw[->] (-2, 0) -- (2, 0) node[right] {$x$};
+        \filldraw (0, 0) circle (.5pt) node[below left] {$\mathrm{O}$};
+      \end{tikzpicture}
+  }}]}
+
+
+    \begin{tikzpicture}[scale=1.5] 
+        % 1. グラフ（関数）の描画
+        % domain: xの範囲 (-2.5から2.5)
+        % samples: 滑らかさ
+        % blue, thick: 色と太さ
+        \draw[domain=-2.5:2.5, samples=100, blue, thick] plot (\x, {\x*\x});
+        
+        % 2. 座標軸の描画
+        % -> で矢印を追加
+        % x軸 (x=-3からx=3まで)
+        \draw[->] (-3, 0) -- (3, 0) node[right] {$x$};
+        % y軸 (y=0からy=5まで)
+        \draw[->] (0, 0) -- (0, 5) node[above] {$y$};
+
+        % 3. 原点に小さな点を描画
+        \filldraw (0, 0) circle (1.5pt) node[below left] {O};
+        
+        % 4. 任意の目盛りを描画 (オプション)
+        \foreach \x in {-2, -1, 1, 2}
+            \draw (\x, 0.1) -- (\x, -0.1) node[below] {$\x$};
+        \foreach \y in {1, 4}
+            \draw (0.1, \y) -- (-0.1, \y) node[left] {$\y$};
+            
+    \end{tikzpicture}
 
 \MarkArrayMake{テスト}{|$\pm$|0|1|2|3|}
 \KKran[3pt]{%
@@ -27,7 +64,5 @@
   \小問番号{1}\小問欄{6}{1}[center=\マークシート{5}{\テストマーク配列}[4]]\GoDown{1}
   \小問番号{1}\小問欄{6}{1}[center=\マークシート{5}{\テストマーク配列}[3]]\GoDown{1}
 }[shoumon=いろは,daimon=ア]
-
-\usefont{T1}{phv}{m}{n}$\pi$
 
 \end{document}

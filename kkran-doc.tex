@@ -1,0 +1,274 @@
+\documentclass[luatex,fontsize=8pt,paper=b5,twoside]{jlreq}%
+\usepackage{luwa-ul}
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage[most]{tcolorbox}
+\usepackage{fp}
+\usepackage{lltjext}
+\usepackage{luatexja-ruby}
+\usepackage{KKsymbols}
+\usepackage{KKran}
+
+\usepackage{listings}
+\lstset{
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    breaklines=true,
+    breakatwhitespace=false,  
+    columns=flexible           
+}
+
+% You can omit these font settings.
+\RequirePackage[no-math]{fontspec}
+\RequirePackage[no-math,match,scale=1]{luatexja-fontspec}
+\RequirePackage[hiragino-pro,deluxe,expert]{luatexja-preset}
+\setmainfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]\setmainjfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\renewfontfamily{\sffamily}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
+\renewfontfamily{\mcfamily}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\renewfontfamily{\gtfamily}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
+\providefontfamily{\mgfamily}{HiraMaruPro-W4}
+\newfontfamily{\sfhira}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]\newjfontfamily{\sfhiraj}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
+\newfontfamily{\mchira}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]\newjfontfamily{\mchiraj}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\newfontfamily{\gthira}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]\newjfontfamily{\gthiraj}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]
+\newfontfamily{\mghira}{HiraMaruPro-W4}\newjfontfamily{\mghiraj}{HiraMaruPro-W4}
+\renewcommand{\sffamily}{\sfhira\sfhiraj}
+\renewcommand{\mcfamily}{\mchira\mchiraj}
+\renewcommand{\gtfamily}{\gthira\gthiraj}
+\renewcommand{\mgfamily}{\mghira\mghiraj}
+%%%
+
+
+\usepackage{hyperref} 
+\hypersetup{
+  luatex, pdfencoding=auto, 
+  colorlinks=true,
+  linkcolor=black,     
+  citecolor=black,     
+  urlcolor=DeepSkyBlue3,      
+  pdfborder={0 0 0}, 
+}
+
+\colorlet{grayLight}{white!80!black} 
+
+\NewTCBListing{SourceCode}{ O{Input} m !o !O{DeepSkyBlue3} }{%
+  enhanced, colback=black!70, colframe=Snow4,
+  toptitle=-1mm, bottomtitle=-1mm,
+  righttitle=-1mm, lefttitle=-1mm,
+  arc=.5mm, 
+  title={\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=gray!80, coltext=white]{\raisebox{-0.1ex}{\vphantom{羅}\vphantom{j}#1}}},fonttitle=\gtfamily\footnotesize,boxrule=0.8pt,
+  breakable,before upper={\color{white}},top=-0.5mm,bottom=-0.5mm,
+  after title=\IfNoValueTF{#3}{}{{\hfill\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=white!80!black, coltext=#4]{\raisebox{-0.1ex}{\vphantom{羅}\vphantom{j}#3}}}},
+  listing only,
+  listing options={
+    language={#2},
+    basicstyle=\ttfamily,
+    keywordstyle=\ttfamily\color{white},
+    stringstyle=\itshape\color{white},
+    commentstyle=\small\gtfamily\color{DeepSkyBlue2},
+    showspaces=false,showtabs=false,
+    breaklines=true,breakindent=0pt,
+    showstringspaces=false,
+    columns=fullflexible,
+    tabsize=2,
+    numbers=left,numbersep=1.5pt,
+    numberstyle=\scriptsize\gtfamily\color{gray},
+  }
+}
+
+\NewTColorBox{OutPut}{ m !o !O{DeepSkyBlue3} }{%
+  enhanced, colframe=Snow4,
+  toptitle=-1mm, bottomtitle=-1mm,
+  righttitle=-1mm, lefttitle=-1mm,
+  arc=.5mm, colback=white, 
+  title={\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=gray!40, coltext=DeepSkyBlue3]{\raisebox{-0.1ex}{\vphantom{羅}\vphantom{j}#1}}},fonttitle=\gtfamily\footnotesize,boxrule=0.8pt,
+  breakable,top=-0.5mm,bottom=-0.5mm,
+  after title=\IfNoValueTF{#2}{}{{\hfill\tcbox[on line, arc=.5mm, boxsep=0pt, boxrule=0pt, top=1mm, bottom=0.8mm, left=2mm, right=2.2mm, colback=white!80!black, coltext=#3]{\raisebox{-0.1ex}{\vphantom{羅}\vphantom{j}#2}}}}, bottom=2mm, top=2mm, 
+}
+
+\title{\texttt{KKran} Package Documentation}
+\author{Kosei Kawaguchi a.k.a. KKTeX}
+\date{Version 1.0.0 (2025/11/23)}
+
+\begin{document}
+\begin{titlepage}
+  \maketitle
+\end{titlepage}
+\newpage
+\tableofcontents
+\newpage
+
+\section{はじめに}
+このパッケージは、オーソドックスなフォーマットの解答欄を作成するためのコマンドを提供するパッケージです。横書きと縦書きの両方に対応しています。内部的にLuaの構文を使用しているので、\namiKK{LuaLaTeX限定}です。また、現状\texttt{jlreq}でコンパイルしないと正しく出力できないオプションを持つコマンドが存在するため、\namiKK{\texttt{jlreq}クラスを使用}してください。
+
+\section{依存性}
+内部的に読み込むパッケージは
+\begin{itemize}
+  \item calc, tikz
+  \item xcolor, KKsymbols
+  \item kvoptions, luacode
+\end{itemize}
+\noindent となります。
+
+\section{設置・オプション}
+しかるべき場所に\texttt{KKran.sty}が置かれている下で、\verb|\usepackage[オプション]{KKran}|により読み込みます。
+
+パッケージオプションは
+
+\begin{description}
+  \item[kaitouhyouji] 解答欄上に模範解答を出力するか否かを指定します。"0"なら出力せず、"1"なら出力します。デフォルトは１です。
+  \item[kaitoucolor] 模範解答の文字の色を指定します。デフォルトはredです。
+  \item[gridmax] マス目を出力するコマンドである\verb|\小問マス目| において、１行当たりの最大マス目数を指定します。デフォルトは20です。
+  \item[nongridmax] 記述解答欄を出力するコマンドである\verb|\小問記述| において、１行当たりの最大マス目数を指定します。ただし、このコマンドではマス目は可視化されません。デフォルトは20です。
+  \item[unit] 本パッケージでは「マス目単位で」各解答欄の位置を制御します。その際の１マスの幅を指定するのがこのオプションです。デフォルトは\verb|2\zw|です。
+\end{description}
+
+\section{使い方}
+\subsection{\textbackslash KKran}
+このパッケージを使って解答欄を出力する場合、解答欄は\verb|\KKran[オプション]{引数}|の\verb|{引数}|に入れていくという形をとります。
+
+\begin{SourceCode}{TeX}
+  \KKran[解答欄の外枠を囲む線の太さ]{引数}[ナンバリングのオプション]
+\end{SourceCode}
+
+\noindent という構文です。使い方は別のコマンドと共に説明していきます。
+
+\subsection{小問}
+小問を構成する際は、\verb|\小問番号|で番号を、\verb|\小問欄|と\verb|\小問中欄|で欄をつけるという形です。
+
+\begin{SourceCode}{TeX}
+  % 構文
+  \小問番号[横幅]{縦幅}[番号]
+  % デフォルト
+  % 横幅：.5
+  % 番号：アラビア数字（\kakkoに入っている）
+
+  % 使用例
+  \KKran{%
+    \小問番号[1]{2}\小問番号{2}[A]\小問番号{2}[B]\小問番号[1]{2}\小問番号[1]{2}
+  }
+\end{SourceCode}
+
+\noindent が基本構文です。
+
+出力は
+
+\begin{OutPut}{Output}
+  \KKran{%
+    \小問番号[1]{2}\小問番号{2}[A]\小問番号{2}[B]\小問番号[1]{2}\小問番号[1]{2}
+  }
+\end{OutPut}
+
+\noindent のようになります。
+
+第３引数を指定しない場合、小問番号のカウンタは自動で進みますが、ここを手動で書いた場合はカウンタが進みません。
+カウンタを強制的にある値にしたい場合には、\verb|\SetShoumon{99}|のように変更できるようにしてあります。
+
+また、当然ながら大問が変わると値はリセットされます（大問の分け方は後述）。
+
+ここに、\verb|\小問欄|および\verb|小問中欄|を組み合わせます。
+
+\begin{SourceCode}{TeX}
+  % 構文
+  \小問欄{横幅}{縦幅}[欄内記入]
+  \小問中欄{横幅}{縦幅}[欄内記入]
+  % デフォルト
+  % 欄内記入：空集合
+
+  % 使用例
+  \KKran{%
+    \小問番号{2}\小問中欄{3}{2}\小問中欄{3}{2}\小問欄{4}{2}[south east={$\mathrm{mm}$}, west={$x=$}]\小問番号{2}\小問欄{4}{2}
+  }
+\end{SourceCode}
+
+\begin{OutPut}{Output}
+  \KKran{%
+    \小問番号{2}\小問中欄{3}{2}\小問中欄{3}{2}\小問欄{4}{2}[south east={$\mathrm{mm}$}, west={$x=$}]\小問番号{2}\小問欄{4}{2}
+  }
+\end{OutPut}
+
+基本的には\verb|\小問欄|を使いますが、同一の小問内で複数解答欄を用意する時などは、最後の欄以外を\verb|\小問中欄|にしても良いでしょう。
+
+欄内記入に関して、オプションとしてcenter,east,west,north east, north west, south east, south westをとることができ、各key名に対応する箇所をアンカーポイントとしてその引数が出力されます。tikzにおけるnodeのオプションと全く同様です。
+
+引数には何を挿入してもよく、図表も挿入可能です。
+
+\begin{SourceCode}{TeX}
+  \KKran{
+    \小問番号{6}\小問欄{8}{6}[center={%
+      \begin{tabular}{|l|c|r|}
+      \hline
+      列1 & 列2 & 列3 \\ \hline
+      データA & 100 & 5.5 \\ \hline
+      データB & 200 & 9.8 \\ \hline
+      データC & 300 & 12.3 \\ \hline
+      \end{tabular}
+    }] 
+    \小問番号{6}\小問欄{9}{6}[center={%
+      \begin{tikzpicture}
+        \draw[->] (0, -.3) -- (0, 2.5) node[above] {$y$};
+        \draw[->] (-2, 0) -- (2, 0) node[right] {$x$};
+        \filldraw (0, 0) circle (.5pt) node[below left] {$\mathrm{O}$};
+        \draw[domain=-1.5:1.5, samples=100, thick] plot (\x, {\x*\x});
+      \end{tikzpicture}
+    }] 
+  }
+\end{SourceCode}
+
+\begin{OutPut}{Output}
+  \KKran{
+    \小問番号{6}\小問欄{8}{6}[center={%
+      \begin{tabular}{|l|c|r|}
+      \hline
+      列1 & 列2 & 列3 \\ \hline
+      データA & 100 & 5.5 \\ \hline
+      データB & 200 & 9.8 \\ \hline
+      データC & 300 & 12.3 \\ \hline
+      \end{tabular}
+    }] 
+    \小問番号{6}\小問欄{9}{6}[center={%
+      \begin{tikzpicture}
+        \draw[->] (0, -.3) -- (0, 2.5) node[above] {$y$};
+        \draw[->] (-2, 0) -- (2, 0) node[right] {$x$};
+        \filldraw (0, 0) circle (.5pt) node[below left] {$\mathrm{O}$};
+        \draw[domain=-1.5:1.5, samples=100, thick] plot (\x, {\x*\x});
+      \end{tikzpicture}
+    }] 
+  }
+\end{OutPut}
+
+\subsection{模範解答入力}
+模範解答を入力する場合、その部分を\verb|\KaitouInput{引数}|によって入力しておくと、パッケージオプションである\texttt{kaitouhyouji}が1の時だけ表示されるようになります。ただし、この効果は\verb|\color|コマンドによる色の変更が可能な範囲に限ります。
+
+tikzの描画も当然解答として入力可能ですが、
+
+\begin{SourceCode}{TeX}
+  \KKran{
+    \小問番号{6}\小問欄{9}{6}[center={\KaitouInput{%
+      \begin{tikzpicture}
+        \draw[->] (0, -.3) -- (0, 2.5) node[above] {$y$};
+        \draw[->] (-2, 0) -- (2, 0) node[right] {$x$};
+        \filldraw (0, 0) circle (.5pt) node[below left] {$\mathrm{O}$};
+        \draw[domain=-1.5:1.5, samples=100, thick, blue] plot (\x, {\x*\x}); % ここ！
+      \end{tikzpicture}
+    }}] 
+  }
+\end{SourceCode}
+
+\begin{OutPut}{Output}
+    \KKran{
+    \小問番号{6}\小問欄{9}{6}[center={\KaitouInput{%
+      \begin{tikzpicture}
+        \draw[->] (0, -.3) -- (0, 2.5) node[above] {$y$};
+        \draw[->] (-2, 0) -- (2, 0) node[right] {$x$};
+        \filldraw (0, 0) circle (.5pt) node[below left] {$\mathrm{O}$};
+        \draw[domain=-1.5:1.5, samples=100, thick, blue] plot (\x, {\x*\x}); % ここ！
+      \end{tikzpicture}
+    }}] 
+  }
+\end{OutPut}
+
+のように明示的に色を指定した場合、そこだけは\verb|\KaitouInput|の効果範囲外となることに注意しましょう。
+
+\end{document}

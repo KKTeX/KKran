@@ -46,28 +46,53 @@
 \newcount\NUM@shoumon
 
 
+
 % 番号を手動で指定できるように、第３opを追加（未）
 % 手動指定した場合は\advance\NUM@mondai by 1を無効に
 
-\NewDocumentCommand{\Daimon@Box@A@N}{ O{.5} m }{% 大問番号
-  \global\advance\NUM@mondai by 1%
+\NewDocumentCommand{\RevBangou}{m}{\rotatebox[origin=c]{-90}{#1}}
+
+\NewDocumentCommand{\daimon@bangou@yokotate}{}{%
+  \ifnum\ltjgetparameter{direction}=3%
+    \def\rotate@or@not@daimon{90}
+  \else
+    \def\rotate@or@not@daimon{0}%
+  \fi%
+} 
+\NewDocumentCommand{\Daimon@Box@A@N}{ O{.5} m o }{% 大問番号
+  \daimon@bangou@yokotate%
+  \IfNoValueTF{#3}{\global\advance\NUM@mondai by 1}{}%
   \global\def\modai@bangou@wd{#1}%
   \draw[line width=\waku@KKran] (0,0) rectangle (#1\width@KKran,- #2\width@KKran);%
   \node[anchor=center,overlay
-  % ,rotate=90 % 縦書きなら
+    ,rotate=\rotate@or@not@daimon
   ]
-   at (.5*#1\width@KKran,- .5*#2\width@KKran) {\scalebox{.8}{\kakko{\number\NUM@mondai}}};
+   at (.5*#1\width@KKran,- .5*#2\width@KKran) {\scalebox{.8}{\IfNoValueTF{#3}{\kakko{\number\NUM@mondai}}{#3}}};
   \pgfmathparse{\mondai@position@tmp + \modai@bangou@wd}%
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
 
-\NewDocumentCommand{\Shoumon@Box@A@N}{ O{.5} m }{% 小問番号
-  \advance\NUM@shoumon by 1%
+\NewDocumentCommand{\shoumon@bangou@yokotate}{}{%
+  \ifnum\ltjgetparameter{direction}=3%
+    \def\rotate@or@not@shoumon{90}
+  \else
+    \def\rotate@or@not@shoumon{0}%
+  \fi%
+} 
+\NewDocumentCommand{\Shoumon@Box@A@N}{ O{.5} m o }{% 小問番号
+  \shoumon@bangou@yokotate
+  \IfNoValueTF{#3}{\advance\NUM@mondai by 1}{}%
+
   \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #2\width@KKran);
   \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (#1\width@KKran,0);
   \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off] (\mondai@position@tmp\width@KKran+#1\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #2\width@KKran);
   \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran+#1\width@KKran,-\mondai@position@y@tmp\width@KKran- #2\width@KKran) -- ++ (-#1\width@KKran,0);
-  \node[anchor=center,overlay] at (\mondai@position@tmp\width@KKran+.5*#1\width@KKran,-\mondai@position@y@tmp\width@KKran- .5*#2\width@KKran) {\scalebox{.8}{\kakko{\number\NUM@shoumon}}};
+
+  \node[anchor=center,overlay
+    ,rotate=\rotate@or@not@shoumon
+  ]
+  at (\mondai@position@tmp\width@KKran+.5*#1\width@KKran,-\mondai@position@y@tmp\width@KKran- .5*#2\width@KKran) {\scalebox{.8}{\IfNoValueTF{#3}{\kakko{\number\NUM@mondai}}{#3}}};
+
   \pgfmathparse{\mondai@position@tmp + #1}%
   \edef\mondai@position@tmp{\pgfmathresult}%
 }
@@ -415,7 +440,7 @@
   % 2. 各ボックス描画コマンドを「矩形塗りつぶし(\fill)」に再定義
   
   % \Daimon@Box@A@N のパッチ
-  \RenewDocumentCommand{\Daimon@Box@A@N}{ O{.5} m }{%
+  \RenewDocumentCommand{\Daimon@Box@A@N}{ O{.5} m O{} }{%
     \global\def\modai@bangou@wd{##1}%
     \fill (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) 
           rectangle ++(##1\width@KKran, -##2\width@KKran);%
@@ -424,7 +449,7 @@
   }%
   
   % Shoumon@Box@A@N のパッチ
-  \RenewDocumentCommand{\Shoumon@Box@A@N}{ O{.5} m }{%
+  \RenewDocumentCommand{\Shoumon@Box@A@N}{ O{.5} m O{} }{%
     \fill (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) 
           rectangle ++(##1\width@KKran, -##2\width@KKran);%
     \pgfmathparse{\mondai@position@tmp + ##1}%

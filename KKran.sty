@@ -287,7 +287,12 @@
     \fi
     
     \ifnum\grid@max@A<\grid@x@A% maxの方の描画
-      \draw[step=\unit@KKran,dashed,line width=\tensenwaku@KKran] (\mondai@position@tmp\width@KKran+\unit@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran) grid (\mondai@position@tmp\width@KKran+\amari@grid@max@A\unit@KKran,-\mondai@position@y@tmp\width@KKran+\shou@grid@max@A\unit@KKran);% まずはマス目
+      % 垂直線（左端除去）
+        \foreach \x in {1,2,...,\amari@grid@max@A} {
+          \draw[dashed,line width=\tensenwaku@KKran]
+            ($(\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) + (\x\unit@KKran,0)$)
+            -- ++(0,-\unit@KKran);
+        }
 
       \draw[line width=\tensenwaku@KKran, dash pattern=on \mondai@dash@pat@on off \mondai@dash@pat@off]  (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran-\unit@KKran);
       \draw[line width=\waku@KKran]
@@ -866,6 +871,7 @@ end
 % \小問欄{6}{1}[center={\マークシート{5}{\解答マーク配列}}]で使う
 \NewDocumentCommand{\マークシート}{ m m o }{%
   \makebox[#1\unit@KKran]{%
+    \usefont{T1}{phv}{m}{n}%
     \IfNoValueTF{#3}{%
       #2% 引数なし（すべて白）
     }{%

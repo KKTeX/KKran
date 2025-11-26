@@ -244,8 +244,8 @@
 }
 \newdimen\unit@KKran
 \unit@KKran=\kkran@unit
-\NewDocumentCommand{\Shoumon@Grid@A}{ m O{#1} O{} }{% 第３引数はmax、第４引数はmin
-    \def\grid@max@A{#1}\def\grid@min@A{#2}%
+\NewDocumentCommand{\Shoumon@Grid@A}{ O{#2} m  O{} }{% 
+    \def\grid@max@A{#2}\def\grid@min@A{#1}%
     \ifnum\grid@max@A<\grid@min@A% 大小がおかしい時はerror
       \errmessage{Error: \grid@max@A (\the\grid@max@A) must be greater than or equal to \grid@min@A (\the\grid@min@A).}%
     \fi%
@@ -485,8 +485,8 @@
     }%
 
   % Shoumon@Grid@A/NonGrid@A
-  \RenewDocumentCommand{\Shoumon@Grid@A}{ m O{##1} O{}}{%
-    \def\grid@max@A{##1}\def\grid@min@A{##2}%
+  \RenewDocumentCommand{\Shoumon@Grid@A}{ O{##2} m O{}}{%
+    \def\grid@max@A{##2}\def\grid@min@A{##1}%
     \def\grid@x@A{\kkran@gridmax}% 可変にしてもいい
     \pgfmathtruncatemacro{\shou@grid@max@A}{\grid@max@A / \grid@x@A}%
     \pgfmathtruncatemacro{\amari@grid@max@A}{mod(\grid@max@A,\grid@x@A)}%

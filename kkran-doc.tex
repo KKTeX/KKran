@@ -136,7 +136,12 @@ This is a package that offers commands for generating answer fields used in test
   \item[tensenwakuwidth] 欄の一部に使われている点線部分の太さを指定します。デフォルトは\verb|.7pt|です。
   \item[tensenon] 欄の一部に使われている点線部分のdash-patternを決めるためのもので、線の最小単位の長さを指定できます。デフォルトは\verb|.5pt|です。
   \item[tensenoff] 欄の一部に使われている点線部分のdash-patternを決めるためのもので、最小単位の配置間隔を指定できます。デフォルトは\verb|.7pt|です。
-  \item[clsadjust] jlreqクラス以外を指定する場合は、\verb|clsadjust=1|を指定する。デフォルトは0。
+  \item[clsadjust] jlreqクラス以外を指定する場合は、\verb|clsadjust=1|を指定します。デフォルトは0です。ただし、内部的には、\verb|clsadjust=1|の時に
+  \begin{lstlisting}
+    \RequirePackage[scale=1]{luatexja-fontspec}
+    \RequirePackage[deluxe,expert]{luatexja-preset}
+  \end{lstlisting}
+  \noindent を読み込むという処理をしているため、より詳細にこれらのオプションを設定したい場合には\verb|clsadjust=0|とし、適宜設定をしてください。
 \end{description}
 
 \section{使い方}

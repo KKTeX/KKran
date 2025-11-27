@@ -100,13 +100,16 @@
 \tableofcontents
 \newpage
 
+\section{Outline in English}
+This is a package that offers commands for generating answer fields used in tests and exams. It is compatible with both vertical and horizontal text formatting. Using Lua and tikz, I made it possible to generate answer-boxes very easily. By the way, the naming may seem a bit odd, but the package name comes from "欄 (ran)," meaning "a small space." I hope this package will be helpful to you.
+
 \section{はじめに}
 このパッケージは、オーソドックスなフォーマットの解答欄を作成するためのコマンドを提供するパッケージです。横書きと縦書きの両方に対応しています。内部的にLuaの構文を使用しているので、\namiKK{LuaLaTeX限定}です。また、現状\texttt{jlreq}でコンパイルしないと正しく出力できないオプションを持つコマンドが存在するため、\namiKK{\texttt{jlreq}クラスを使用}してください。
 
 本パッケージによって、以下のような解答欄を作成することが可能です。サンプルのソースコードは本マニュアル末のセクションにあります。
 
 \begin{center}
-  \includegraphics[width=.9\columnwidth]{sample.pdf}
+  \includegraphics[width=.9\columnwidth]{kkran-sample.pdf}
 \end{center}
 
 \section{依存性}
@@ -470,7 +473,7 @@ tikzの描画も当然解答として入力可能ですが、
 
 \begin{OutPut}{Output}
   \begin{center}
-    \includegraphics[width=.7\columnwidth]{sample.pdf}
+    \includegraphics[width=.7\columnwidth]{kkran-sample.pdf}
   \end{center}
 \end{OutPut}
 

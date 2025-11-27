@@ -20,6 +20,7 @@
 \usetikzlibrary{calc}
 \RequirePackage{kvoptions}
 \RequirePackage{luacode} 
+\RequirePackage{etoolbox} 
 
 \SetupKeyvalOptions{%
   family=kkran,%
@@ -34,7 +35,18 @@
 \DeclareStringOption[.35pt]{tensenwakuwidth}
 \DeclareStringOption[.5pt]{tensenon}
 \DeclareStringOption[.7pt]{tensenoff}
+\DeclareStringOption[0]{clsadjust}
 \ProcessKeyvalOptions*
+
+\ifnum\number\kkran@clsadjust=1
+  \RequirePackage[scale=1]{luatexja-fontspec}
+  \RequirePackage[deluxe,expert]{luatexja-preset}
+\else
+  \ifnum\number\kkran@clsadjust=0
+  \else
+    \errmessage{Error: clsadjust option requires to be 0 or 1.}%
+  \fi
+\fi
 
 \NewDocumentCommand{\KaitouInput}{m}{%
   \ifnum\number\kkran@kaitouhyouji=1

@@ -104,7 +104,7 @@
 This is a package that offers commands for generating answer fields used in tests and exams. It is compatible with both vertical and horizontal text formatting. Using Lua and tikz, I made it possible to generate answer-boxes very easily. By the way, the naming may seem a bit odd, but the package name comes from ``欄 (ran)'' meaning ``a small space.'' I hope this package will be helpful to you.
 
 \section{はじめに}
-このパッケージは、オーソドックスなフォーマットの解答欄を作成するためのコマンドを提供するパッケージです。横書きと縦書きの両方に対応しています。内部的にLuaの構文を使用しているので、\namiKK{LuaLaTeX限定}です。また、現状\texttt{jlreq}でコンパイルしないと正しく出力できないオプションを持つコマンドが存在するため、\namiKK{\texttt{jlreq}クラスを使用}してください。
+このパッケージは、オーソドックスなフォーマットの解答欄を作成するためのコマンドを提供するパッケージです。横書きと縦書きの両方に対応しています。内部的にLuaの構文を使用しているので、\namiKK{LuaLaTeX限定}です。
 
 本パッケージによって、以下のような解答欄を作成することが可能です。サンプルのソースコードは本マニュアル末のセクションにあります。
 
@@ -136,6 +136,7 @@ This is a package that offers commands for generating answer fields used in test
   \item[tensenwakuwidth] 欄の一部に使われている点線部分の太さを指定します。デフォルトは\verb|.7pt|です。
   \item[tensenon] 欄の一部に使われている点線部分のdash-patternを決めるためのもので、線の最小単位の長さを指定できます。デフォルトは\verb|.5pt|です。
   \item[tensenoff] 欄の一部に使われている点線部分のdash-patternを決めるためのもので、最小単位の配置間隔を指定できます。デフォルトは\verb|.7pt|です。
+  \item[clsadjust] jlreqクラス以外を指定する場合は、\verb|clsadjust=1|を指定する。デフォルトは0。
 \end{description}
 
 \section{使い方}
@@ -519,7 +520,18 @@ tikzの描画も当然解答として入力可能ですが、
   \DeclareStringOption[.35pt]{tensenwakuwidth}
   \DeclareStringOption[.5pt]{tensenon}
   \DeclareStringOption[.7pt]{tensenoff}
+  \DeclareStringOption[0]{clsadjust}
   \ProcessKeyvalOptions*
+
+  \ifnum\number\kkran@clsadjust=1
+    \RequirePackage[scale=1]{luatexja-fontspec}
+    \RequirePackage[deluxe,expert]{luatexja-preset}
+  \else
+    \ifnum\number\kkran@clsadjust=0
+    \else
+      \errmessage{Error: clsadjust option requires to be 0 or 1.}%
+    \fi
+  \fi
 
   \NewDocumentCommand{\KaitouInput}{m}{%
     \ifnum\number\kkran@kaitouhyouji=1

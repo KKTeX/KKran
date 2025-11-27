@@ -18,6 +18,10 @@
 \DeclareStringOption[20]{gridmax}
 \DeclareStringOption[20]{nongridmax}
 \DeclareStringOption[2\zw]{unit}
+\DeclareStringOption[.7pt]{wakuwidth}
+\DeclareStringOption[.35pt]{tensenwakuwidth}
+\DeclareStringOption[.5pt]{tensenon}
+\DeclareStringOption[.7pt]{tensenoff}
 \ProcessKeyvalOptions*
 
 \NewDocumentCommand{\KaitouInput}{m}{%
@@ -35,16 +39,16 @@
 \newdimen\width@KKran
 \width@KKran=\kkran@unit
 
-\newdimen\waku@KKran \waku@KKran=.7pt
-\newdimen\tensenwaku@KKran \tensenwaku@KKran =.35pt
+\newdimen\waku@KKran \waku@KKran=\kkran@wakuwidth
+\newdimen\tensenwaku@KKran \tensenwaku@KKran =\kkran@tensenwakuwidth
 
 
 \def\modai@bangou@wd{0.5}
 \def\mondai@position@tmp{0}
 \def\mondai@position@y@tmp{0}
 
-\def\mondai@dash@pat@on{.5pt}
-\def\mondai@dash@pat@off{.7pt}
+\def\mondai@dash@pat@on{\kkran@tensenon}
+\def\mondai@dash@pat@off{\kkran@tensenoff}
 
 \newcount\NUM@mondai
 \newcount\NUM@shoumon
@@ -319,7 +323,7 @@
         }
 
         % 水平線
-        \foreach \y in {0,1,...,\amari@grid@max@A} {
+        \foreach \y in {0,1,...,\shou@grid@max@A} {
           \draw[dashed,line width=\tensenwaku@KKran]
             ($(P@amarizero) + (0,-\y\unit@KKran)$)
             -- ++(\grid@x@A\unit@KKran,0);

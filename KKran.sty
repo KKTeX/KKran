@@ -11,7 +11,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{KKran}[2025/11/23, Version 1.0.0]
+\ProvidesPackage{KKran}[2025/11/23, Version 1.1.0--undev]
 \RequirePackage{calc}
 \RequirePackage{tikz}
 \RequirePackage{xcolor}
@@ -79,6 +79,7 @@
 
 
 % 縦書きの時のみ仕様\kakko{\RevBangou{あ}}みたいに
+% KKsymbolsがv2.0.0から\RotTateを使って中身だけ回転させるか否かを決めるようにするので、配列側のひらがな、カタカナ、漢数字など直接影響を受ける部分に回転作用を移動させるべし（リリース後）
 \NewDocumentCommand{\RevBangou}{m}{%
   \ifnum\ltjgetparameter{direction}=3%
     \rotatebox[origin=c]{-90}{#1}%

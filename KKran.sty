@@ -79,7 +79,7 @@
 
 
 % 縦書きの時のみ仕様\kakko{\RevBangou{あ}}みたいに
-% KKsymbolsがv2.0.0から\RotTateを使って中身だけ回転させるか否かを決めるようにするので、配列側のひらがな、カタカナ、漢数字など直接影響を受ける部分に回転作用を移動させるべし（リリース後）
+% KKsymbolsがv2.0.0から\RotTateを使って中身だけ回転させるか否かを決めるようにするので、それに対応。
 \NewDocumentCommand{\RevBangou}{m}{%
   \ifnum\ltjgetparameter{direction}=3%
     \rotatebox[origin=c]{-90}{#1}%

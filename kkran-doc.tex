@@ -90,7 +90,7 @@
 
 \title{\texttt{KKran} Package Documentation}
 \author{Kosei Kawaguchi a.k.a. KKTeX}
-\date{Version 1.0.0 (2025/11/23)}
+\date{Version 1.1.0 (2025/12/23)}
 
 \begin{document}
 \begin{titlepage}
@@ -375,21 +375,21 @@ tikzの描画も当然解答として入力可能ですが、
   % 使用例
   \KKran[3pt]{%
     \大問番号[1]{3}
-    \小問番号{1}\小問マス目[4]{6}[\KaitouInput{\ichimoji{12}\ichimoji{3}番目\ichimoji{。}}]\GoDown{1}
-    \小問番号{2}\小問マス目{40}[\KaitouInput{\ichimoji{「}日本に\ichimoji{Ma}\ichimoji{tt}\ichimoji{he}\ichimoji{w\phantom{w}}＝\ichimoji{Pe}\ichimoji{rr}\ichimoji{y\phantom{y}}提督が来たから。\ichimoji{」}という話であります。}]
+    \小問番号{1}\小問マス目[4]{6}[\KaitouInput{\ichimoji*{12}\ichimoji*{3}番目\ichimoji*{。}}]\GoDown{1}
+    \小問番号{2}\小問マス目{40}[\KaitouInput{\ichimoji*{「}日本に\ichimoji*{Ma}\ichimoji*{tt}\ichimoji*{he}\ichimoji*{w\phantom{w}}＝\ichimoji*{Pe}\ichimoji*{rr}\ichimoji*{y\phantom{y}}提督が来たから。\ichimoji*{」}という話であります。}]
   }
 \end{SourceCode}
 
 \begin{OutPut}{Output}
   \KKran[3pt]{%
     \大問番号[1]{3}
-    \小問番号{1}\小問マス目[4]{6}[\KaitouInput{\ichimoji{12}\ichimoji{3}番目\ichimoji{。}}]\GoDown{1}
-    \小問番号{2}\小問マス目{40}[\KaitouInput{\ichimoji{「}日本に\ichimoji{Ma}\ichimoji{tt}\ichimoji{he}\ichimoji{w\phantom{w}}＝\ichimoji{Pe}\ichimoji{rr}\ichimoji{y\phantom{y}}提督が来たから。\ichimoji{」}という話であります。}]
+    \小問番号{1}\小問マス目[4]{6}[\KaitouInput{\ichimoji*{12}\ichimoji*{3}番目\ichimoji*{。}}]\GoDown{1}
+    \小問番号{2}\小問マス目{40}[\KaitouInput{\ichimoji*{「}日本に\ichimoji*{Ma}\ichimoji*{tt}\ichimoji*{he}\ichimoji*{w\phantom{w}}＝\ichimoji*{Pe}\ichimoji*{rr}\ichimoji*{y\phantom{y}}提督が来たから。\ichimoji*{」}という話であります。}]
   }
 \end{OutPut}
 
 \section{マークシート}
-マークシートの作り方は、\verb|\MarkArrayMake|でひとまず必要な配列を作成しておき、\verb|\マークシート|コマンドで配置します。
+マークシートの作り方は、\verb|\MarkArrayMake|でひとまず必要な配列を作成しておき、\verb|\マークシート|コマンドで配置します。この機能に関しては、横書きモードでのみ使用されることを想定していることに注意してください。
 
 \begin{SourceCode}{TeX}
   % 構文
@@ -443,9 +443,9 @@ tikzの描画も当然解答として入力可能ですが、
     \小問番号{2}\小問欄{4}{2}[center=\KaitouInput{つわもの}]\小問番号{2}\小問欄{2}{2}[center=\KaitouInput{ウ}]\小問番号{2}\小問欄{2}{2}[center=\KaitouInput{エ}]
     \小問番号{2}\小問欄{4}{2}[center=\KaitouInput{片雲の風}]
     \小問番号{2}\小問欄{5}{2}[center=\KaitouInput{春夜宴桃李園序}]\GoDown{2}
-    \小問番号{4}\小問マス目[45]{65}[\KaitouInput{李白の著名な詩を元にした\ichimoji{「}月日は百代の過客\ichimoji{」}という表現を引いて旅に主題を仄めかしつつ\ichimoji{、}滑らかにに自身の紀行文に主眼を移す役割\ichimoji{。}}]\GoDown{4}
+    \小問番号{4}\小問マス目[45]{65}[\KaitouInput{李白の著名な詩を元にした\ichimoji*{「}月日は百代の過客\ichimoji*{」}という表現を引いて旅に主題を仄めかしつつ\ichimoji*{、}滑らかにに自身の紀行文に主眼を移す役割\ichimoji*{。}}]\GoDown{4}
     \小問番号{1}\小問マス目{7}[\KaitouInput{道祖神の招き}]%
-  }[shoumon=一,daimon=ア]
+  }[shoumon=a,daimon=ア]
   \bigskip
 
   \KKran{%
@@ -475,6 +475,7 @@ tikzの描画も当然解答として入力可能ですが、
   }[shoumon=一,daimon=ア]
 
   \end{document}
+
 \end{SourceCode}
 
 \begin{OutPut}{Output}
@@ -497,20 +498,22 @@ tikzの描画も当然解答として入力可能ですが、
 \section{Version History}
 \begin{itemize}
   \item \textbf{v1.0.0 (2025/11/23)} --- Initial public release.
+  \item \textbf{v1.1.0 (2025/12/23)} --- Changed internal behavior in order to follow KKsymbols v2.0.0
 \end{itemize}
 
 \section{Source Code}
 \begin{lstlisting}
   \NeedsTeXFormat{LaTeX2e}
-  \ProvidesPackage{KKran}[2025/11/23, Version 1.0.0]
+  \ProvidesPackage{KKran}[2025/12/23, Version 1.1.0]
   \RequirePackage{calc}
   \RequirePackage{tikz}
   \RequirePackage{xcolor}
-  \RequirePackage{KKsymbols}
+  \RequirePackage{KKsymbols}%%%
   \usetikzlibrary{shapes}
   \usetikzlibrary{calc}
   \RequirePackage{kvoptions}
   \RequirePackage{luacode} 
+  \RequirePackage{etoolbox} 
 
   \SetupKeyvalOptions{%
     family=kkran,%
@@ -569,6 +572,7 @@ tikzの描画も当然解答として入力可能ですが、
 
 
   % 縦書きの時のみ仕様\kakko{\RevBangou{あ}}みたいに
+  % KKsymbolsがv2.0.0から\RotTateを使って中身だけ回転させるか否かを決めるようにするので、それに対応。
   \NewDocumentCommand{\RevBangou}{m}{%
     \ifnum\ltjgetparameter{direction}=3%
       \rotatebox[origin=c]{-90}{#1}%
@@ -583,13 +587,13 @@ tikzの描画も当然解答として入力可能ですが、
 
   \NewDocumentCommand{\daimon@bangou@yokotate}{}{%
     \ifnum\ltjgetparameter{direction}=3%
-      \def\rotate@or@not@daimon{90}
+      \def\rotate@or@not@daimon{0}
     \else
       \def\rotate@or@not@daimon{0}%
     \fi%
   } 
   \NewDocumentCommand{\how@to@count@daimon@bangou}{}{%
-    \number\NUM@mondai%
+    \kakko@kkran{\number\NUM@mondain}%
   } 
   \NewDocumentCommand{\Daimon@Box@A@N}{ O{.5} m o }{% 大問番号
     \daimon@bangou@yokotate%
@@ -599,20 +603,20 @@ tikzの描画も当然解答として入力可能ですが、
     \node[anchor=center,overlay
       ,rotate=\rotate@or@not@daimon
     ]
-    at (.5*#1\width@KKran,- .5*#2\width@KKran) {\scalebox{.8}{\IfNoValueTF{#3}{\kakko{\how@to@count@daimon@bangou}}{#3}}};
+    at (.5*#1\width@KKran,- .5*#2\width@KKran) {\scalebox{.8}{\IfNoValueTF{#3}{\how@to@count@daimon@bangou}{#3}}};
     \pgfmathparse{\mondai@position@tmp + \modai@bangou@wd}%
     \edef\mondai@position@tmp{\pgfmathresult}%
   }
 
   \NewDocumentCommand{\shoumon@bangou@yokotate}{}{%
     \ifnum\ltjgetparameter{direction}=3%
-      \def\rotate@or@not@shoumon{90}
+      \def\rotate@or@not@shoumon{0}
     \else
       \def\rotate@or@not@shoumon{0}%
     \fi%
   } 
   \NewDocumentCommand{\how@to@count@shoumon@bangou}{}{%
-    \number\NUM@shoumon%
+    \kakko@kkran{\number\NUM@shoumon}%
   } 
   \NewDocumentCommand{\Shoumon@Box@A@N}{ O{.5} m o }{% 小問番号
     \shoumon@bangou@yokotate
@@ -626,7 +630,7 @@ tikzの描画も当然解答として入力可能ですが、
     \node[anchor=center,overlay
       ,rotate=\rotate@or@not@shoumon
     ]
-    at (\mondai@position@tmp\width@KKran+.5*#1\width@KKran,-\mondai@position@y@tmp\width@KKran- .5*#2\width@KKran) {\scalebox{.8}{\IfNoValueTF{#3}{\kakko{\how@to@count@shoumon@bangou}}{#3}}};
+    at (\mondai@position@tmp\width@KKran+.5*#1\width@KKran,-\mondai@position@y@tmp\width@KKran- .5*#2\width@KKran) {\scalebox{.8}{\IfNoValueTF{#3}{\how@to@count@shoumon@bangou}{#3}}};
 
     \pgfmathparse{\mondai@position@tmp + #1}%
     \edef\mondai@position@tmp{\pgfmathresult}%
@@ -1169,59 +1173,60 @@ tikzの描画も当然解答として入力可能ですが、
     /KKran/.is family, /KKran/.cd,
     daimon/.is choice, 
     daimon/a/.code={%
-      \def\how@to@count@daimon@bangou{\slowcare{\alphabetarray{\number\NUM@mondai}}}%
+      \def\how@to@count@daimon@bangou{\kakko*{\alphabetarray{\number\NUM@mondai}}}%
     },
     daimon/A/.code={%
-      \def\how@to@count@daimon@bangou{\alphabetarray*{\number\NUM@mondai}}%
+      \def\how@to@count@daimon@bangou{\kakko{\alphabetarray*{\number\NUM@mondai}}}%
     },
     daimon/あ/.code={%
-      \def\how@to@count@daimon@bangou{\RevBangou{\gojyuon{\number\NUM@mondai}}}%
+      \def\how@to@count@daimon@bangou{\kakko{\RevBangou{\gojyuon{\number\NUM@mondai}}}}%
     },
     daimon/ア/.code={%
-      \def\how@to@count@daimon@bangou{\RevBangou{\gojyuon*{\number\NUM@mondai}}}%
+      \def\how@to@count@daimon@bangou{\kakko{\RevBangou{\gojyuon*{\number\NUM@mondai}}}}%
     },
     daimon/いろは/.code={%
-      \def\how@to@count@daimon@bangou{\RevBangou{\iroha{\number\NUM@mondai}}}%
+      \def\how@to@count@daimon@bangou{\kakko{\RevBangou{\iroha{\number\NUM@mondai}}}}%
     },
     daimon/イロハ/.code={%
-      \def\how@to@count@daimon@bangou{\RevBangou{\iroha*{\number\NUM@mondai}}}%
+      \def\how@to@count@daimon@bangou{\kakko{\RevBangou{\iroha*{\number\NUM@mondai}}}}%
     },
     daimon/一/.code={%
-      \def\how@to@count@daimon@bangou{\RevBangou{\wabunkansuji{\number\NUM@mondai}}}%
+      \def\how@to@count@daimon@bangou{\kakko{\RevBangou{\wabunkansuji{\number\NUM@mondai}}}}%
     },
     daimon/ロ小/.code={%
-      \def\how@to@count@daimon@bangou{\Rrnum{\number\NUM@mondai}}%
+      \def\how@to@count@daimon@bangou{\kakko{\Rrnum{\number\NUM@mondai}}}%
     },
     daimon/ロ大/.code={%
-      \def\how@to@count@daimon@bangou{\Rrnum*{\number\NUM@mondai}}%
+      \def\how@to@count@daimon@bangou{\kakko{\Rrnum*{\number\NUM@mondai}}}%
     },
     shoumon/.is choice, 
     shoumon/a/.code={%
-      \def\how@to@count@shoumon@bangou{\slowcare{\alphabetarray{\number\NUM@shoumon}}}%
+      \def\how@to@count@shoumon@bangou{\kakko*{\alphabetarray{\number\NUM@shoumon}}}%
     },
     shoumon/A/.code={%
-      \def\how@to@count@shoumon@bangou{\alphabetarray*{\number\NUM@shoumon}}%
+      \def\how@to@count@shoumon@bangou{\kakko{\alphabetarray*{\number\NUM@shoumon}}}%
     },
     shoumon/あ/.code={%
-      \def\how@to@count@shoumon@bangou{\RevBangou{\gojyuon{\number\NUM@shoumon}}}%
+      \def\how@to@count@shoumon@bangou{\kakko{\RevBangou{\gojyuon{\number\NUM@shoumon}}}}%
     },
     shoumon/ア/.code={%
-      \def\how@to@count@shoumon@bangou{\RevBangou{\gojyuon*{\number\NUM@shoumon}}}%
+      \def\how@to@count@shoumon@bangou{\kakko{\RevBangou{\gojyuon*{\number\NUM@shoumon}}}}%
     },
     shoumon/いろは/.code={%
-      \def\how@to@count@shoumon@bangou{\RevBangou{\iroha{\number\NUM@shoumon}}}%
+      \def\how@to@count@shoumon@bangou{\kakko{\RevBangou{\iroha{\number\NUM@shoumon}}}}%
     },
     shoumon/イロハ/.code={%
-      \def\how@to@count@shoumon@bangou{\RevBangou{\iroha*{\number\NUM@shoumon}}}%
+      \def\how@to@count@shoumon@bangou{\kakko{\RevBangou{\iroha*{\number\NUM@shoumon}}}}%
     },
     shoumon/一/.code={%
-      \def\how@to@count@shoumon@bangou{\RevBangou{\wabunkansuji{\number\NUM@shoumon}}}%
+      \let\kakko@kkran\kakko%
+      \def\how@to@count@shoumon@bangou{\kakko{\RevBangou{\wabunkansuji{\number\NUM@shoumon}}}}%
     },
     shoumon/ロ小/.code={%
-      \def\how@to@count@shoumon@bangou{\Rrnum{\number\NUM@shoumon}}%
+      \def\how@to@count@shoumon@bangou{\kakko{\Rrnum{\number\NUM@shoumon}}}%
     },
     shoumon/ロ大/.code={%
-      \def\how@to@count@shoumon@bangou{\Rrnum*{\number\NUM@shoumon}}%
+      \def\how@to@count@shoumon@bangou{\kakko{\Rrnum*{\number\NUM@shoumon}}}%
     },
   }
   \NewDocumentCommand{\KKran}{ O{2pt} m O{} }{%
@@ -1270,73 +1275,11 @@ tikzの描画も当然解答として入力可能ですが、
 
 
   % マークシート
-  % ひとまずKKsymbolsの書き方で楕円を作る
-  \newlength{\oval@boxwidth}
-  \newlength{\oval@textwidth}
-  \newlength{\oval@textheight}
-  \newcommand{\VerticalAdjustOval}{%
-    \ifnum\ltjgetparameter{direction}=3
-      -0.17ex % 縦組
-    \else
-      0.19ex  % 横組
-    \fi
-  }
-  \DeclareRobustCommand{\kyouteoval}[1]{%
-    \settowidth{\oval@textwidth}{#1}%
-    \settoheight{\oval@textheight}{#1}%
-    \setlength{\oval@boxwidth}{\f@size pt}%
-    \ltjghostbeforejachar%
-    \vphantom{羅}\raisebox{\VerticalAdjustOval}{%
-      \hbox to \oval@boxwidth{%
-        \hss
-        \tikz[baseline=(char.base)]{%
-          \node[
-            shape=ellipse,
-            line width=0.15ex,  
-            minimum height=.9\oval@boxwidth, 
-            minimum width=.55\oval@boxwidth, 
-            draw,
-            inner sep=0pt
-          ] (char){%
-            \raisebox{0.165ex}{\scalebox{0.6}{\vphantom{羅}\makebox[.75\oval@boxwidth][c]{\maybescale{\oval@textwidth}{.6\oval@boxwidth}{\maybescaleV{\oval@textheight}{1.03\oval@boxwidth}{#1}}}}}% 
-          };
-        }%
-        \hss
-      }%
-    }%
-    \ltjghostafterjachar
-  }
-  \DeclareRobustCommand{\kyouteovalblack@KKran@internal}[1]{%
-    \settowidth{\oval@textwidth}{#1}%
-    \settoheight{\oval@textheight}{#1}%
-    \setlength{\oval@boxwidth}{\f@size pt}%
-    \ltjghostbeforejachar%
-    \vphantom{羅}\raisebox{\VerticalAdjustOval}{%
-      \hbox to \oval@boxwidth{%
-        \hss
-        \tikz[baseline=(char.base)]{%
-          \node[
-            shape=ellipse,
-            line width=0.15ex,  
-            minimum height=.9\oval@boxwidth, 
-            minimum width=.55\oval@boxwidth, 
-            draw,
-            fill=black!70,
-            inner sep=0pt
-          ] (char){%
-            \raisebox{0.165ex}{\scalebox{0.6}{\vphantom{羅}\makebox[.75\oval@boxwidth][c]{\maybescale{\oval@textwidth}{.6\oval@boxwidth}{\maybescaleV{\oval@textheight}{1.03\oval@boxwidth}{#1}}}}}% 
-          };
-        }%
-        \hss
-      }%
-    }%
-    \ltjghostafterjachar
-  }
 
   \ifnum\number\kkran@kaitouhyouji=1 %
-    \let\kyouteovalblack\kyouteovalblack@KKran@internal%
+    \let\kyouteovalblackUSEINTERNAL\jegg@new@black%
   \else%
-    \let\kyouteovalblack\kyouteoval%
+    \let\kyouteovalblackUSEINTERNAL\jegg@new%
   \fi%
 
   \begin{luacode*}
@@ -1366,10 +1309,10 @@ tikzの描画も当然解答として入力可能ですが、
       for i, val in ipairs(items) do
           if i == target then
               -- 指定されたインデックスなら黒丸
-              table.insert(output, "\\kyouteovalblack{" .. val .. "}")
+              table.insert(output, "\\kyouteovalblackUSEINTERNAL{" .. val .. "}")
           else
               -- それ以外は白丸
-              table.insert(output, "\\kyouteoval{" .. val .. "}")
+              table.insert(output, "\\jegg{" .. val .. "}")
           end
       end
       
@@ -1389,7 +1332,7 @@ tikzの描画も当然解答として入力可能ですが、
   % \小問欄{6}{1}[center={\マークシート{5}{\解答マーク配列}}]で使う
   \NewDocumentCommand{\マークシート}{ m m o }{%
     \makebox[#1\unit@KKran]{%
-      \usefont{T1}{phv}{m}{n}%
+      \usefont{T1}{phv}{m}{n}\gtfamily%
       \IfNoValueTF{#3}{%
         #2% 引数なし（すべて白）
       }{%

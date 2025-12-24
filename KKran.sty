@@ -850,4 +850,13 @@ end
   }%
 }
 
+% （特に縦書きでマークに）$\pm$ みたいなのを入れる時など
+% boxの寸法が想定と異なる場合に固定する
+\newcommand{\MarkFixKK}[3]{%
+  \ifnum\ltjgetparameter{direction}=3\relax%
+    \lower.25\zw\vbox to #1{\vss\hbox to #2{\hss#3\hss}\vss}%
+  \else%
+    \vbox to #1{\vss\hbox to #2{\hss#3\hss}\vss}%
+  \fi%
+}
 \endinput

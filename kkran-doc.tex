@@ -391,6 +391,8 @@ tikzの描画も当然解答として入力可能ですが、
 \section{マークシート}
 マークシートの作り方は、\verb|\MarkArrayMake|でひとまず必要な配列を作成しておき、\verb|\マークシート|コマンドで配置します。この機能に関しては、横書きモードでのみ使用されることを想定していることに注意してください。
 
+万が一、縦書きのマークシートを作ろうとする場合、引数に数式モードを入れると壊れることがあります。そのような場合には\verb|\MarkFixKK{縦幅}{横幅}{引数}|によって引数の占める縦横の幅を手動設定し、出力を固定してください。
+
 \begin{SourceCode}{TeX}
   % 構文
   \MarkArrayMake{配列名}{|要素1|要素2|...|要素n|}
@@ -410,6 +412,19 @@ tikzの描画も当然解答として入力可能ですが、
     \小問番号{1}\小問欄{6}{1}[center=\マークシート{5}{\テストBマーク配列}[4]]\GoDown{1}
     \小問番号{1}\小問欄{6}{1}[center=\マークシート{5}{\テストBマーク配列}[3]]\GoDown{1}
   }[shoumon=一,daimon=ア]
+
+  % 非推奨ではあるが縦書きで使用する場合
+  \MarkFixKK{横幅}{縦幅}{引数}
+  \MarkArrayMake{テストA}{|\MarkFixKK{\zw}{\zw}{$\pm$}|0|1|2|3|}
+
+  % MarkFixKKは以下の定義がなされています。
+  \newcommand{\MarkFixKK}[3]{%
+    \ifnum\ltjgetparameter{direction}=3\relax%
+      \lower.25\zw\vbox to #2{\vss\hbox to #1{\hss#3\hss}\vss}%
+    \else%
+      \vbox to #2{\vss\hbox to #1{\hss#3\hss}\vss}%
+    \fi%
+  }
 \end{SourceCode}
 
 \begin{OutPut}{Output}
@@ -604,7 +619,7 @@ tikzの描画も当然解答として入力可能ですが、
     \fi%
   } 
   \NewDocumentCommand{\how@to@count@daimon@bangou}{}{%
-    \kakko@kkran{\number\NUM@mondain}%
+    \kakko{\number\NUM@mondai}%
   } 
   \NewDocumentCommand{\Daimon@Box@A@N}{ O{.5} m o }{% 大問番号
     \daimon@bangou@yokotate%
@@ -627,7 +642,7 @@ tikzの描画も当然解答として入力可能ですが、
     \fi%
   } 
   \NewDocumentCommand{\how@to@count@shoumon@bangou}{}{%
-    \kakko@kkran{\number\NUM@shoumon}%
+    \kakko{\number\NUM@shoumon}%
   } 
   \NewDocumentCommand{\Shoumon@Box@A@N}{ O{.5} m o }{% 小問番号
     \shoumon@bangou@yokotate
@@ -1230,7 +1245,6 @@ tikzの描画も当然解答として入力可能ですが、
       \def\how@to@count@shoumon@bangou{\kakko{\RevBangou{\iroha*{\number\NUM@shoumon}}}}%
     },
     shoumon/一/.code={%
-      \let\kakko@kkran\kakko%
       \def\how@to@count@shoumon@bangou{\kakko{\RevBangou{\wabunkansuji{\number\NUM@shoumon}}}}%
     },
     shoumon/ロ小/.code={%
@@ -1354,6 +1368,15 @@ tikzの描画も当然解答として入力可能ですが、
     }%
   }
 
+  % （特に縦書きでマークに）$\pm$ みたいなのを入れる時など
+  % boxの寸法が想定と異なる場合に固定する
+  \newcommand{\MarkFixKK}[3]{%
+    \ifnum\ltjgetparameter{direction}=3\relax%
+      \lower.25\zw\vbox to #2{\vss\hbox to #1{\hss#3\hss}\vss}%
+    \else%
+      \vbox to #2{\vss\hbox to #1{\hss#3\hss}\vss}%
+    \fi%
+  }
   \endinput
 \end{lstlisting}
 \end{document}

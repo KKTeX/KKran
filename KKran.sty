@@ -100,7 +100,7 @@
   \fi%
 } 
 \NewDocumentCommand{\how@to@count@daimon@bangou}{}{%
-  \kakko@kkran{\number\NUM@mondain}%
+  \kakko{\number\NUM@mondai}%
 } 
 \NewDocumentCommand{\Daimon@Box@A@N}{ O{.5} m o }{% 大問番号
   \daimon@bangou@yokotate%
@@ -123,7 +123,7 @@
   \fi%
 } 
 \NewDocumentCommand{\how@to@count@shoumon@bangou}{}{%
-  \kakko@kkran{\number\NUM@shoumon}%
+  \kakko{\number\NUM@shoumon}%
 } 
 \NewDocumentCommand{\Shoumon@Box@A@N}{ O{.5} m o }{% 小問番号
   \shoumon@bangou@yokotate
@@ -726,7 +726,6 @@
     \def\how@to@count@shoumon@bangou{\kakko{\RevBangou{\iroha*{\number\NUM@shoumon}}}}%
   },
   shoumon/一/.code={%
-    \let\kakko@kkran\kakko%
     \def\how@to@count@shoumon@bangou{\kakko{\RevBangou{\wabunkansuji{\number\NUM@shoumon}}}}%
   },
   shoumon/ロ小/.code={%
@@ -854,9 +853,9 @@ end
 % boxの寸法が想定と異なる場合に固定する
 \newcommand{\MarkFixKK}[3]{%
   \ifnum\ltjgetparameter{direction}=3\relax%
-    \lower.25\zw\vbox to #1{\vss\hbox to #2{\hss#3\hss}\vss}%
+    \lower.25\zw\vbox to #2{\vss\hbox to #1{\hss#3\hss}\vss}%
   \else%
-    \vbox to #1{\vss\hbox to #2{\hss#3\hss}\vss}%
+    \vbox to #2{\vss\hbox to #1{\hss#3\hss}\vss}%
   \fi%
 }
 \endinput

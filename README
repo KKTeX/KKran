@@ -18,6 +18,7 @@ Dependencies:
 calc, tikz, xcolor, KKsymbols, kvoptions, luacode
 
 Notice
+-------------
 This package is **LuaLaTeX-only**. 
 
 See kkran-doc.tex for usage examples.

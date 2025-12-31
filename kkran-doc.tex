@@ -1,14 +1,10 @@
 \documentclass[luatex,fontsize=8pt,paper=b5,twoside]{jlreq}%
-\usepackage{luwa-ul}
-\usepackage{hyperref}
-\usepackage{caption}
-\usepackage[most]{tcolorbox}
-\usepackage{fp}
-\usepackage{lltjext}
-\usepackage{luatexja-ruby}
-\usepackage{KKsymbols}
-\usepackage{KKran}
 \usepackage{amsmath,amssymb}
+\usepackage{booktabs,caption}
+\usepackage{luwa-ul}
+\usepackage[most]{tcolorbox}
+\usepackage{luatexja-ruby}
+\usepackage{KKran}
 
 \usepackage{listings}
 \lstset{
@@ -22,22 +18,25 @@
 }
 
 % You can omit these font settings.
+\makeatletter
 \RequirePackage[no-math]{fontspec}
 \RequirePackage[no-math,match,scale=1]{luatexja-fontspec}
 \RequirePackage[hiragino-pro,deluxe,expert]{luatexja-preset}
-\setmainfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]\setmainjfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
-\renewfontfamily{\sffamily}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
-\renewfontfamily{\mcfamily}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
-\renewfontfamily{\gtfamily}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
-\providefontfamily{\mgfamily}{HiraMaruPro-W4}
-\newfontfamily{\sfhira}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]\newjfontfamily{\sfhiraj}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
-\newfontfamily{\mchira}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]\newjfontfamily{\mchiraj}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
-\newfontfamily{\gthira}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]\newjfontfamily{\gthiraj}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]
-\newfontfamily{\mghira}{HiraMaruPro-W4}\newjfontfamily{\mghiraj}{HiraMaruPro-W4}
-\renewcommand{\sffamily}{\sfhira\sfhiraj}
-\renewcommand{\mcfamily}{\mchira\mchiraj}
-\renewcommand{\gtfamily}{\gthira\gthiraj}
-\renewcommand{\mgfamily}{\mghira\mghiraj}
+\setmainfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\setmainjfont{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\newfontfamily{\sfhira@pre}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
+\newjfontfamily{\sfhiraj@pre}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6]
+\newfontfamily{\mchira@pre}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\newjfontfamily{\mchiraj@pre}{HiraMinPro-W3}[BoldFont=HiraMinPro-W6]
+\newfontfamily{\gthira@pre}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]
+\newjfontfamily{\gthiraj@pre}{HiraKakuPro-W3}[BoldFont=HiraKakuPro-W6,FontFace={eb}{\shapedefault}{HiraKakuStd-W8}]
+\newfontfamily{\mghira@pre}{HiraMaruPro-W4}
+\newjfontfamily{\mghiraj@pre}{HiraMaruPro-W4}
+\renewcommand{\sffamily}{\sfhira@pre\sfhiraj@pre}
+\renewcommand{\mcfamily}{\mchira@pre\mchiraj@pre}
+\renewcommand{\gtfamily}{\gthira@pre\gthiraj@pre}
+\renewcommand{\mgfamily}{\mghira@pre\mghiraj@pre}
+\makeatother
 %%%
 
 
@@ -53,7 +52,7 @@
 
 \colorlet{grayLight}{white!80!black} 
 
-\NewTCBListing{SourceCode}{ O{Input} m !o !O{DeepSkyBlue3} }{%
+\NewTCBListing{SourceCode}{ m m !o !O{DeepSkyBlue3} }{%
   enhanced, colback=black!70, colframe=Snow4,
   toptitle=-1mm, bottomtitle=-1mm,
   righttitle=-1mm, lefttitle=-1mm,
@@ -148,7 +147,7 @@ This is a package that offers commands for generating answer fields used in test
 \subsection{\textbackslash KKran}
 このパッケージを使って解答欄を出力する場合、解答欄は\verb|\KKran[オプション]{引数}|の\verb|{引数}|に入れていくという形をとります。
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   \KKran[解答欄の外枠を囲む線の太さ]{引数}[ナンバリングのオプション]
 \end{SourceCode}
 
@@ -156,7 +155,7 @@ This is a package that offers commands for generating answer fields used in test
 
 ナンバリングのオプションとは、番号をどの形式で進めるかを指定するもので、
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   \KKran[解答欄の外枠を囲む線の太さ]{引数}[%
     daimon=いろは, shoumon=一
   ]
@@ -172,7 +171,7 @@ This is a package that offers commands for generating answer fields used in test
 \subsection{小問}
 小問を構成する際は、\verb|\小問番号|で番号を、\verb|\小問欄|と\verb|\小問中欄|で欄をつけるという形です。
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 構文
   \小問番号[横幅]{縦幅}[番号]
   % デフォルト
@@ -204,7 +203,7 @@ This is a package that offers commands for generating answer fields used in test
 
 ここに、\verb|\小問欄|および\verb|小問中欄|を組み合わせます。
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 構文
   \小問欄{横幅}{縦幅}[欄内記入]
   \小問中欄{横幅}{縦幅}[欄内記入]
@@ -229,7 +228,7 @@ This is a package that offers commands for generating answer fields used in test
 
 引数には何を挿入してもよく、図表も挿入可能です。
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   \KKran{
     \小問番号{6}\小問欄{8}{6}[center={%
       \begin{tabular}{|l|c|r|}
@@ -278,7 +277,7 @@ This is a package that offers commands for generating answer fields used in test
 
 tikzの描画も当然解答として入力可能ですが、
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   \KKran{
     \小問番号{6}\小問欄{9}{6}[center={\KaitouInput{%
       \begin{tikzpicture}
@@ -309,7 +308,7 @@ tikzの描画も当然解答として入力可能ですが、
 \section{大問ごとの組み方}
 大問を組むとなる場合、\verb|\大問番号|というコマンドで番号をつけ、段ごとに\verb|\小問欄|などを並べていきます。段をずらす際には\verb|\GoDown|というコマンドを使用していきます。
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 構文
   \大問番号[横幅]{縦幅}[番号]
   % デフォルト
@@ -343,7 +342,7 @@ tikzの描画も当然解答として入力可能ですが、
 
 注意点として、\verb|\linewidth|を上回る横幅を解答欄が占めるような組み方をしてはならないというものがあります。エラーにはなりませんが、大問と大問との間隔が余計に１行分大きくなってしまいます。
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 構文
   \小問マス目[文字数下限]{文字数上限}[欄内記入]
   \小問記述{文字数上限}[欄内記入]
@@ -371,7 +370,7 @@ tikzの描画も当然解答として入力可能ですが、
 
 また、ここに模範解答を入力する際は半角英数字や約物を全角１マスに適切に拡大縮小するため、必要に応じて\verb|\ichimoji|というコマンド（\texttt{KKsymbols}パッケージが提供していますが、本パッケージは内部的に\texttt{KKsymbols}パッケージを読み込むため使用可能です。）を使用します。
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 使用例
   \KKran[3pt]{%
     \大問番号[1]{3}
@@ -393,7 +392,7 @@ tikzの描画も当然解答として入力可能ですが、
 
 万が一、縦書きのマークシートを作ろうとする場合、引数に数式モードを入れると壊れることがあります。そのような場合には\verb|\MarkFixKK{縦幅}{横幅}{引数}|によって引数の占める縦横の幅を手動設定し、出力を固定してください。
 
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   % 構文
   \MarkArrayMake{配列名}{|要素1|要素2|...|要素n|}
   \マークシート{配置幅}{配列格納}[正解番号]
@@ -446,7 +445,7 @@ tikzの描画も当然解答として入力可能ですが、
 \verb|\マークシート{配置幅}{配列格納}[正解番号]|の第３引数で指定した番号を$n \in \mathbb{N}$として、作成した配列の$n$番目が黒く塗られる仕様となっており、模範解答の入力はこれで行います。\verb|kaitouhyouji=0|の時は塗られず、\verb|kaitouhyouji=1|のときにのみ黒く塗った部分が表示されます。
 
 \section{サンプル}
-\begin{SourceCode}{TeX}
+\begin{SourceCode}{Input}{TeX}
   \documentclass{jlreq}
 
   \usepackage[kaitouhyouji=1,gridmax=20,kaitoucolor=red]{KKran}
@@ -517,18 +516,6 @@ tikzの描画も当然解答として入力可能ですが、
 
 \section{Source Code}
 \begin{lstlisting}
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  % Released under the MIT License.
-
-  % Copyright (c) 2025 Kosei Kawaguchi
-
-  % Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-  % The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-  % THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
   \NeedsTeXFormat{LaTeX2e}
   \ProvidesPackage{KKran}[2025/12/23, Version 1.1.0]
   \RequirePackage{calc}

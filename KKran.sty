@@ -24,7 +24,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{KKran}[2025/12/23, Version 1.1.0]
+\ProvidesPackage{KKran}[2026/01/02, Version 1.1.1]
 \RequirePackage{calc}
 \RequirePackage{tikz}
 \RequirePackage{xcolor}
@@ -808,43 +808,43 @@
 stored_arrays = {}
 
 function register_mark_array(name, input_str)
-    local items = {}
-    -- パイプ区切りで要素を取得してLuaテーブルに保存
-    for s in string.gmatch(input_str, "[^|]+") do
-        table.insert(items, s)
-    end
-    stored_arrays[name] = items
-    
-    -- TeXマクロを定義
-    -- \解答マーク配列[n] の形式で呼び出せるようにする (デフォルトは0)
-    -- 内部で render_mark_array を呼び出す
-    tex.print("\\expandafter\\newcommand\\csname " .. name .. "マーク配列\\endcsname[1][0]{" .. 
-              "\\directlua{render_mark_array('" .. name .. "', #1)}}")
+  local items = {}
+  -- パイプ区切りで要素を取得してLuaテーブルに保存
+  for s in string.gmatch(input_str, "[^|]+") do
+      table.insert(items, s)
+  end
+  stored_arrays[name] = items
+  
+  -- TeXマクロを定義
+  -- \解答マーク配列[n] の形式で呼び出せるようにする (デフォルトは0)
+  -- 内部で render_mark_array を呼び出す
+  tex.print("\\expandafter\\newcommand\\csname " .. name .. "マーク配列\\endcsname[1][0]{" .. 
+            "\\directlua{render_mark_array('" .. name .. "', #1)}}")
 end
 
 function render_mark_array(name, active_index)
-    local items = stored_arrays[name]
-    local output = {}
-    local target = tonumber(active_index)
+  local items = stored_arrays[name]
+  local output = {}
+  local target = tonumber(active_index)
 
-    for i, val in ipairs(items) do
-        if i == target then
-            -- 指定されたインデックスなら黒丸
-            table.insert(output, "\\kyouteovalblackUSEINTERNAL{" .. val .. "}")
-        else
-            -- それ以外は白丸
-            table.insert(output, "\\jegg{" .. val .. "}")
-        end
-    end
-    
-    -- \hfill で結合してTeXに出力
-    tex.print(table.concat(output, "\\hfill "))
+  for i, val in ipairs(items) do
+      if i == target then
+          -- 指定されたインデックスなら黒丸
+          table.insert(output, "\\kyouteovalblackUSEINTERNAL{" .. val .. "}")
+      else
+          -- それ以外は白丸
+          table.insert(output, "\\jegg{" .. val .. "}")
+      end
+  end
+  
+  -- \hfill で結合してTeXに出力
+  tex.print(table.concat(output, "\\hfill "))
 end
 \end{luacode*}
 
 % 配列作成マクロ
 \newcommand{\MarkArrayMake}[2]{%
-    \directlua{register_mark_array("\luaescapestring{#1}", "\luaescapestring{#2}")}%
+  \directlua{register_mark_array("\luaescapestring{#1}", "\luaescapestring{#2}")}%
 }
 
 % マークシート表示マクロ

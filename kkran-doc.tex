@@ -89,7 +89,7 @@
 
 \title{\texttt{KKran} Package Documentation}
 \author{Kosei Kawaguchi a.k.a. KKTeX}
-\date{Version 1.1.1 (2026/01/02)}
+\date{Version 1.1.2 (2026/01/08)}
 
 \begin{document}
 \begin{titlepage}
@@ -388,10 +388,7 @@ tikzの描画も当然解答として入力可能ですが、
 \end{OutPut}
 
 \section{マークシート}
-マークシートの作り方は、\verb|\MarkArrayMake|でひとまず必要な配列を作成しておき、\verb|\マークシート|コマンドで配置します。この機能に関しては、横書きモードでのみ使用されることを想定していることに注意してください。
-
-万が一、縦書きのマークシートを作ろうとする場合、引数に数式モードを入れると壊れることがあります。そのような場合には\verb|\MarkFixKK{縦幅}{横幅}{引数}|によって引数の占める縦横の幅を手動設定し、出力を固定してください。
-% バグ治ったら記述を変更、このコマンドを削除。
+マークシートの作り方は、\verb|\MarkArrayMake|でひとまず必要な配列を作成しておき、\verb|\マークシート|コマンドで配置します。この機能に関しては、横書きモードでのみ使用されることを想定していることに注意してください\footnote{縦書き環境に入っても出力が著しく乱れたりエラーになったりはしませんが、そもそもマークシートは横に楕円を並べるものであるため、縦書きの文書と併用する場合にはlltjextなどと併用し部分横書きを使うことを推奨します。}。
 
 \begin{SourceCode}{Input}{TeX}
   % 構文
@@ -412,19 +409,6 @@ tikzの描画も当然解答として入力可能ですが、
     \小問番号{1}\小問欄{6}{1}[center=\マークシート{5}{\テストBマーク配列}[4]]\GoDown{1}
     \小問番号{1}\小問欄{6}{1}[center=\マークシート{5}{\テストBマーク配列}[3]]\GoDown{1}
   }[shoumon=一,daimon=ア]
-
-  % 非推奨ではあるが縦書きで使用する場合
-  \MarkFixKK{横幅}{縦幅}{引数}
-  \MarkArrayMake{テストA}{|\MarkFixKK{\zw}{\zw}{$\pm$}|0|1|2|3|}
-
-  % MarkFixKKは以下の定義がなされています。
-  \newcommand{\MarkFixKK}[3]{%
-    \ifnum\ltjgetparameter{direction}=3\relax%
-      \lower.25\zw\vbox to #2{\vss\hbox to #1{\hss#3\hss}\vss}%
-    \else%
-      \vbox to #2{\vss\hbox to #1{\hss#3\hss}\vss}%
-    \fi%
-  }
 \end{SourceCode}
 
 \begin{OutPut}{Output}
@@ -513,13 +497,13 @@ tikzの描画も当然解答として入力可能ですが、
 \begin{itemize}
   \item \textbf{v1.0.0 (2025/11/23)} --- Initial public release.
   \item \textbf{v1.1.0 (2025/12/23)} --- Changed internal behavior in order to follow KKsymbols v2.0.0
-  \item \textbf{v1.1.1 (2026/01/02)} --- Added license file and improved readme file.
+  \item \textbf{v1.1.2 (2026/01/02)} --- Added license file and improved readme file. In addition, the manual has been updated to reflect bug fixes introduced in luatexja version 20260107.0.
 \end{itemize}
 
 \section{Source Code}
 \begin{lstlisting}
   \NeedsTeXFormat{LaTeX2e}
-  \ProvidesPackage{KKran}[2025/12/23, Version 1.1.0]
+  \ProvidesPackage{KKran}[2025/01/08, Version 1.1.2]
   \RequirePackage{calc}
   \RequirePackage{tikz}
   \RequirePackage{xcolor}
@@ -1355,16 +1339,6 @@ tikzの描画も当然解答として入力可能ですが、
         #2[#3]% 引数あり（指定箇所を黒く）
       }%
     }%
-  }
-
-  % （特に縦書きでマークに）$\pm$ みたいなのを入れる時など
-  % boxの寸法が想定と異なる場合に固定する
-  \newcommand{\MarkFixKK}[3]{%
-    \ifnum\ltjgetparameter{direction}=3\relax%
-      \lower.25\zw\vbox to #2{\vss\hbox to #1{\hss#3\hss}\vss}%
-    \else%
-      \vbox to #2{\vss\hbox to #1{\hss#3\hss}\vss}%
-    \fi%
   }
   \endinput
 \end{lstlisting}

@@ -8,7 +8,7 @@
 
 ## Overview / 概要
 
-`KKran` is a LaTeX package designed for generating answer fields used in tests and exams. The package name originates from the Japanese word **"欄" (ran)**, which means a small area or field. It is fully compatible with both horizontal and vertical text layouts.
+`KKran` is a LaTeX package designed for generating answer fields used in tests and exams. The package name originates from the Japanese word **"欄" (ran)**, which means a small area or field. It is fully compatible with both horizontal and vertical text layouts.<br>
 `KKran` は、テストや試験で作成される解答欄を生成するためのパッケージです。パッケージ名は「解答欄」などの「欄」に由来しています。横書き・縦書きの両方のフォーマットに完全対応しています。
 
 - **Version**: 1.1.2
@@ -48,14 +48,14 @@
 
 ## Usage / 使用方法
 
-For detailed usage and examples, please refer to the documentation file: `kkran-doc.tex`.
+For detailed usage and examples, please refer to the documentation file: `kkran-doc.tex`.<br>
 具体的な使用方法や例については、ドキュメントファイル `kkran-doc.tex` を参照してください。
 
 ---
 
 ## License / ライセンス
 
-This package is licensed under the **MIT License**.
+This package is licensed under the **MIT License**.<br>
 本パッケージは **MITライセンス** のもとで公開されています。
 
 ```text

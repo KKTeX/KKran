@@ -1,19 +1,24 @@
 # ----- setting ------
 SAMPLE_TARGET = kkran-sample
 DOC_TARGET = kkran-doc
+TEST_TARGET = test
 RC     = .latexmkrc
 
 
 # ----- main ------
-.PHONY: clean distclean pvc zip builddoc buildtest
+.PHONY: clean distclean pvc zip doc test sample
 
 # compile
-builddoc:
+doc:
 	latexmk -r $(RC) $(DOC_TARGET).tex
 	$(MAKE) clean
 
-buildsample:
+sample:
 	latexmk -r $(RC) $(SAMPLE_TARGET).tex
+	$(MAKE) clean
+
+test:
+	latexmk -r $(RC) $(TEST_TARGET).tex
 	$(MAKE) clean
 
 

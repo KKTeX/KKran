@@ -27,14 +27,15 @@
 \ProvidesPackage{KKran}[2026/01/08, Version 1.1.2]
 \RequirePackage{calc}
 \RequirePackage{tikz}
+  \usetikzlibrary{shapes}
+  \usetikzlibrary{calc}
 \RequirePackage{xcolor}
 \RequirePackage{KKsymbols}%%%
-\usetikzlibrary{shapes}
-\usetikzlibrary{calc}
-\RequirePackage{kvoptions}
+\RequirePackage{kvoptions, pgfkeys}
 \RequirePackage{luacode} 
 \RequirePackage{etoolbox} 
 
+%%% package options
 \SetupKeyvalOptions{%
   family=kkran,%
   prefix=kkran@%
@@ -50,35 +51,42 @@
 \DeclareStringOption[.7pt]{tensenoff}
 \DeclareStringOption[0]{clsadjust}
 \ProcessKeyvalOptions*
+%%%
 
-\ifnum\number\kkran@clsadjust=1
-  \RequirePackage[scale=1]{luatexja-fontspec}
-  \RequirePackage[deluxe,expert]{luatexja-preset}
-\else
-  \ifnum\number\kkran@clsadjust=0
-  \else
+
+%%% clsadjust
+\ifnum\number\kkran@clsadjust=1%
+  \RequirePackage[scale=1]{luatexja-fontspec}%
+  \RequirePackage[deluxe,expert]{luatexja-preset}%
+\else%
+  \ifnum\number\kkran@clsadjust=0%
+  \else%
     \errmessage{Error: clsadjust option requires to be 0 or 1.}%
-  \fi
-\fi
+  \fi%
+\fi%
+%%%
 
+
+%%% KaitouInput
 \NewDocumentCommand{\KaitouInput}{m}{%
-  \ifnum\number\kkran@kaitouhyouji=1
+  \ifnum\number\kkran@kaitouhyouji=1%
     {\color{\kkran@kaitoucolor}#1}%
-  \else
-    \ifnum\number\kkran@kaitouhyouji=0
+  \else%
+    \ifnum\number\kkran@kaitouhyouji=0%
       {\color{white}#1}%
-    \else
+    \else%
       \errmessage{Error: kaitouhyouji option requires to be 0 or 1.}%
     \fi%
   \fi%
 }
+%%%
 
-\newdimen\width@KKran
-\width@KKran=\kkran@unit
+
+%%% internal parameters
+\newdimen\width@KKran \width@KKran=\kkran@unit
 
 \newdimen\waku@KKran \waku@KKran=\kkran@wakuwidth
 \newdimen\tensenwaku@KKran \tensenwaku@KKran =\kkran@tensenwakuwidth
-
 
 \def\modai@bangou@wd{0.5}
 \def\mondai@position@tmp{0}
@@ -89,10 +97,10 @@
 
 \newcount\NUM@mondai
 \newcount\NUM@shoumon
+%%%
 
 
-% 縦書きの時のみ仕様\kakko{\RevBangou{あ}}みたいに
-% KKsymbolsがv2.0.0から\RotTateを使って中身だけ回転させるか否かを決めるようにするので、それに対応。
+%%% rotation of the question numbers
 \NewDocumentCommand{\RevBangou}{m}{%
   \ifnum\ltjgetparameter{direction}=3%
     \rotatebox[origin=c]{-90}{#1}%
@@ -100,14 +108,17 @@
     #1%
   \fi%
 } 
+%%%
 
-% カウンタを設定するため
+
+%%% counter setting commands
 \NewDocumentCommand{\SetDaimon}{m}{\NUM@mondai=#1}
 \NewDocumentCommand{\SetShoumon}{m}{\NUM@shoumon=#1}
+%%%
 
 \NewDocumentCommand{\daimon@bangou@yokotate}{}{%
   \ifnum\ltjgetparameter{direction}=3%
-    \def\rotate@or@not@daimon{0}
+    \def\rotate@or@not@daimon{0}%
   \else
     \def\rotate@or@not@daimon{0}%
   \fi%
@@ -130,7 +141,7 @@
 
 \NewDocumentCommand{\shoumon@bangou@yokotate}{}{%
   \ifnum\ltjgetparameter{direction}=3%
-    \def\rotate@or@not@shoumon{0}
+    \def\rotate@or@not@shoumon{0}%
   \else
     \def\rotate@or@not@shoumon{0}%
   \fi%
@@ -139,7 +150,7 @@
   \kakko{\number\NUM@shoumon}%
 } 
 \NewDocumentCommand{\Shoumon@Box@A@N}{ O{.5} m o }{% 小問番号
-  \shoumon@bangou@yokotate
+  \shoumon@bangou@yokotate%
   \IfNoValueTF{#3}{\advance\NUM@shoumon by 1}{}%
 
   \draw[line width=\waku@KKran] (\mondai@position@tmp\width@KKran,-\mondai@position@y@tmp\width@KKran) -- ++ (0,- #2\width@KKran);
@@ -749,38 +760,38 @@
   },
 }
 \NewDocumentCommand{\KKran}{ O{2pt} m O{} }{%
-\begingroup%
-  % 第3引数(#3)のキー設定を適用
-    \pgfkeys{/KKran/.cd, #3}%
+  \begingroup%
+    % 第3引数(#3)のキー設定を適用
+      \pgfkeys{/KKran/.cd, #3}%
 
-  % 描画内容をマクロとして定義（３回使い回す）
-  \def\byouga@KKran{%
-    #2%
-  }
-  \begin{tikzpicture}
-    % 1. 黒の太線シルエット（背景）
-    %    BlockFillModeでコマンドを「塗りつぶし」に変え、カウンターをリセットしてから描画
-    \begin{scope}[line width=#1, line join=round] 
-      \BlockFillMode@KKran
-      % fillだけでなくdrawも行うことで外側に太らせる
-      \tikzset{every path/.style={draw=black, fill=black}} 
-      \byouga@KKran
-    \end{scope}
+    % 描画内容をマクロとして定義（３回使い回す）
+    \def\byouga@KKran{%
+      #2%
+    }
+    \begin{tikzpicture}
+      % 1. 黒の太線シルエット（背景）
+      %    BlockFillModeでコマンドを「塗りつぶし」に変え、カウンターをリセットしてから描画
+      \begin{scope}[line width=#1, line join=round] 
+        \BlockFillMode@KKran
+        % fillだけでなくdrawも行うことで外側に太らせる
+        \tikzset{every path/.style={draw=black, fill=black}} 
+        \byouga@KKran
+      \end{scope}
 
-    % 2. 白のシルエット（中抜き用）
-    %    線の太さを0にして、純粋な形状だけで黒い塊の内側をくり抜く
-    \begin{scope}
-      \BlockFillMode@KKran
-      \tikzset{every path/.style={fill=white, draw=none}}
-      \byouga@KKran
-    \end{scope}
+      % 2. 白のシルエット（中抜き用）
+      %    線の太さを0にして、純粋な形状だけで黒い塊の内側をくり抜く
+      \begin{scope}
+        \BlockFillMode@KKran
+        \tikzset{every path/.style={fill=white, draw=none}}
+        \byouga@KKran
+      \end{scope}
 
-    % 3. 本番の描画（前面）
-    \begin{scope}
-      \byouga@KKran
-    \end{scope}
-  \end{tikzpicture}
-\endgroup%
+      % 3. 本番の描画（前面）
+      \begin{scope}
+        \byouga@KKran
+      \end{scope}
+    \end{tikzpicture}
+  \endgroup%
   \def\how@to@count@shoumon@bangou{\kakko{\number\NUM@shoumon}}%
   \def\how@to@count@daimon@bangou{\kakko{\number\NUM@mondai}}%
 }
@@ -804,42 +815,40 @@
 \fi%
 
 \begin{luacode*}
--- 配列データを保存するグローバルテーブル
-stored_arrays = {}
+  stored_arrays = {}
 
-function register_mark_array(name, input_str)
-  local items = {}
-  -- パイプ区切りで要素を取得してLuaテーブルに保存
-  for s in string.gmatch(input_str, "[^|]+") do
-      table.insert(items, s)
+  function register_mark_array(name, input_str)
+    local items = {}
+    -- 区切りで要素を取得してLuaテーブルに保存
+    for s in string.gmatch(input_str, "[^|]+") do
+        table.insert(items, s)
+    end
+    stored_arrays[name] = items
+    
+    -- TeXマクロを定義
+    -- \解答マーク配列[n] の形式で呼び出せるようにする (デフォルトは0)
+    -- 内部で render_mark_array を呼び出す
+    tex.print("\\expandafter\\newcommand\\csname " .. name .. "マーク配列\\endcsname[1][0]{" .. 
+              "\\directlua{render_mark_array('" .. name .. "', #1)}}")
   end
-  stored_arrays[name] = items
-  
-  -- TeXマクロを定義
-  -- \解答マーク配列[n] の形式で呼び出せるようにする (デフォルトは0)
-  -- 内部で render_mark_array を呼び出す
-  tex.print("\\expandafter\\newcommand\\csname " .. name .. "マーク配列\\endcsname[1][0]{" .. 
-            "\\directlua{render_mark_array('" .. name .. "', #1)}}")
-end
 
-function render_mark_array(name, active_index)
-  local items = stored_arrays[name]
-  local output = {}
-  local target = tonumber(active_index)
+  function render_mark_array(name, active_index)
+    local items = stored_arrays[name]
+    local output = {}
+    local target = tonumber(active_index)
 
-  for i, val in ipairs(items) do
-      if i == target then
-          -- 指定されたインデックスなら黒丸
-          table.insert(output, "\\kyouteovalblackUSEINTERNAL{" .. val .. "}")
-      else
-          -- それ以外は白丸
-          table.insert(output, "\\jegg{" .. val .. "}")
-      end
+    for i, val in ipairs(items) do
+        if i == target then
+            -- 指定されたインデックスなら黒丸
+            table.insert(output, "\\kyouteovalblackUSEINTERNAL{" .. val .. "}")
+        else
+            -- それ以外は白丸
+            table.insert(output, "\\jegg{" .. val .. "}")
+        end
+    end
+    
+    tex.print(table.concat(output, "\\hfill "))
   end
-  
-  -- \hfill で結合してTeXに出力
-  tex.print(table.concat(output, "\\hfill "))
-end
 \end{luacode*}
 
 % 配列作成マクロ
@@ -848,9 +857,9 @@ end
 }
 
 % マークシート表示マクロ
-% 第3引数(オプション)があれば、内部のマクロ(#2)にその引数を渡す
-% \MarkArrayMake{解答}{|ア|イ|ウ|エ|オ|}で配列作成
-% \小問欄{6}{1}[center={\マークシート{5}{\解答マーク配列}}]で使う
+% -- 第3引数(オプション)があれば、内部のマクロ(#2)にその引数を渡す。
+% -- \MarkArrayMake{解答}{|ア|イ|ウ|エ|オ|}で配列作成。
+% -- \小問欄{6}{1}[center={\マークシート{5}{\解答マーク配列}}]のように使用。
 \NewDocumentCommand{\マークシート}{ m m o }{%
   \makebox[#1\unit@KKran]{%
     \usefont{T1}{phv}{m}{n}\gtfamily%

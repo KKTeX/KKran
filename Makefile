@@ -40,7 +40,7 @@ styFILENAME = KKran
 ZIP_DIR = $(PACKAGE)
 
 # ----- zip generation -----
-zip: distclean builddoc buildsample
+zip: distclean sample doc
 	mkdir -p $(ZIP_DIR)
 	cp $(styFILENAME).sty $(ZIP_DIR)
 	cp README.md $(ZIP_DIR)

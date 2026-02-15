@@ -1,7 +1,7 @@
 \documentclass[luatex,fontsize=8pt,paper=b5,twoside]{jlreq}%
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs,caption}
-\usepackage{luwa-ul}
+\usepackage{luwa-ul, KKluaverb}
 \usepackage[most]{tcolorbox}
 \usepackage{luatexja-ruby}
 \usepackage{KKran}
@@ -130,8 +130,8 @@ This is a package that offers commands for generating answer fields used in test
     \RequirePackage[deluxe,expert]{luatexja-preset}
   \end{lstlisting}
   \noindent を読み込むという処理をしているため、より詳細にこれらのオプションを設定したい場合には\verb|clsadjust=0|とし、適宜設定をしてください。
-
-  % 追記してない！！！
+  \item[fontdaimonbangou/fontshoumonbangou] 大問番号／小問番号のフォントを\verb|\gtfamily|や\verb|\small|のような形式で指定します。デフォルトは\verb|\relax|（つまり指定なし）です。
+  \item[styledaimonbangou/styleshoumonbangou] 大問番号／小問番号のスタイルを指定します。指定するのは「制御綴名」です。例えば``\verb|\maru{引数}|''（\verb|KKsymbols|パッケージが提供）を使用して大問番号を丸数字にしたいという場合、\verb|styleshoumonbangou=maru|とします。デフォルトは\verb|kakko|となっています。特に括弧や丸などをつけたくない場合、\verb|全角幅固定|と指定するのが推奨されます。
 \end{description}
 
 \section{使い方}

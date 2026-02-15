@@ -24,7 +24,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{KKran}[2026/01/08, Version 1.1.3--undev]
+\ProvidesPackage{KKran}[2026/02/15, Version 1.1.4]
 \RequirePackage{calc}
 \RequirePackage{tikz}
   \usetikzlibrary{shapes}
@@ -47,8 +47,8 @@
 \DeclareStringOption[2\zw]{unit}
 \DeclareStringOption[.7pt]{wakuwidth}
 \DeclareStringOption[.4pt]{tensenwakuwidth} % 検討必須
-\DeclareStringOption[.7pt]{tensenon} % 検討必須
-\DeclareStringOption[.9pt]{tensenoff} % 検討必須
+\DeclareStringOption[1pt]{tensenon} % 検討必須
+\DeclareStringOption[1pt]{tensenoff} % 検討必須
 \DeclareStringOption[0]{clsadjust}
 \DeclareStringOption[\relax]{fontdaimonbangou}
 \DeclareStringOption[\relax]{fontshoumonbangou}
@@ -754,7 +754,7 @@
   },
   daimon/ロ小/.code={%
     \def\how@to@count@daimon@bangou{%
-      {\kkran@fontdaimonbangou\expandafter\csname \bangoustyle@daimon\endcsname{\Rrnum{\number\NUM@mondai}}}%
+      {\kkran@fontdaimonbangou\expandafter\csname \bangoustyle@daimon\endcsname{\vphantom{\Rrnum{6}}\Rrnum{\number\NUM@mondai}}}%
     }%
   },
   daimon/ロ大/.code={%
@@ -800,7 +800,7 @@
   },
   shoumon/ロ小/.code={%
     \def\how@to@count@shoumon@bangou{%
-      {\kkran@fontshoumonbangou\expandafter\csname \bangoustyle@shoumon\endcsname{\Rrnum{\number\NUM@shoumon}}}%
+      {\kkran@fontshoumonbangou\expandafter\csname \bangoustyle@shoumon\endcsname{\vphantom{\Rrnum{6}}\Rrnum{\number\NUM@shoumon}}}%
     }%
   },
   shoumon/ロ大/.code={%
@@ -922,7 +922,6 @@
 %%%
 
 %%%% マス目用縮小
-% マニュアルへ追記する
 \newcommand{\全角幅固定}[1]{%
   \makebox[1\zw]{%
     \sbox0{#1}%

@@ -24,7 +24,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{KKran}[2026/02/15, Version 1.1.4]
+\ProvidesPackage{KKran}[2026/02/17, Version 1.1.5]
 \RequirePackage{calc}
 \RequirePackage{tikz}
   \usetikzlibrary{shapes}
@@ -922,9 +922,9 @@
 %%%
 
 %%%% マス目用縮小
-\newcommand{\全角幅固定}[1]{%
+\NewDocumentCommand{\全角幅固定}{ s m }{%
   \makebox[1\zw]{%
-    \sbox0{#1}%
+    \sbox0{#2}%
     \ifdim\wd0>1\zw%
       \resizebox{1\zw}{\height}{\usebox0}%
     \else%

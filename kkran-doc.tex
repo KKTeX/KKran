@@ -78,7 +78,7 @@
 
 \title{\texttt{KKran} Package Documentation}
 \author{Kosei Kawaguchi a.k.a. KKTeX}
-\date{Version 1.1.4 (2026/02/15)}
+\date{Version 1.1.5 (2026/02/17)}
 
 \begin{document}
 \begin{titlepage}
@@ -102,7 +102,7 @@ This is a package that offers commands for generating answer fields used in test
 
 \section{依存性}
 内部的に読み込むパッケージは
-\begin{itemize}
+\begin{itemize}\ttfamily
   \item calc, tikz
   \item xcolor, KKsymbols
   \item kvoptions, luacode
@@ -115,27 +115,27 @@ This is a package that offers commands for generating answer fields used in test
 パッケージオプションは
 
 \begin{description}
-  \item[kaitouhyouji] 解答欄上に模範解答を出力するか否かを指定します。"0"なら出力せず、"1"なら出力します。デフォルトは１です。
-  \item[kaitoucolor] 模範解答の文字の色を指定します。デフォルトはredです。
-  \item[gridmax] マス目を出力するコマンドである\verb|\小問マス目| において、１行当たりの最大マス目数を指定します。デフォルトは20です。
-  \item[nongridmax] 記述解答欄を出力するコマンドである\verb|\小問記述| において、１行当たりの最大マス目数を指定します。ただし、このコマンドではマス目は可視化されません。デフォルトは20です。
-  \item[unit] 本パッケージでは「マス目単位で」各解答欄の位置を制御します。その際の１マスの幅を指定するのがこのオプションです。デフォルトは\verb|2\zw|です。
-  \item[wakuwidth] 解答欄の枠線の太さを指定します。デフォルトは\verb|.7pt|です。
-  \item[tensenwakuwidth] 欄の一部に使われている点線部分の太さを指定します。デフォルトは\verb|.7pt|です。
-  \item[tensenon] 欄の一部に使われている点線部分のdash-patternを決めるためのもので、線の最小単位の長さを指定できます。デフォルトは\verb|1pt|です。
-  \item[tensenoff] 欄の一部に使われている点線部分のdash-patternを決めるためのもので、最小単位の配置間隔を指定できます。デフォルトは\verb|1pt|です。
-  \item[clsadjust] jlreqクラス以外を指定する場合は、\verb|clsadjust=1|を指定します。デフォルトは0です。ただし、内部的には、\verb|clsadjust=1|の時に
-  \begin{lstlisting}
+  \item[\KKverb|kaitouhyouji|] 解答欄上に模範解答を出力するか否かを指定します。"0"なら出力せず、"1"なら出力します。デフォルトは１です。
+  \item[\KKverb|kaitoucolor|] 模範解答の文字の色を指定します。デフォルトはredです。
+  \item[\KKverb|gridmax|] マス目を出力するコマンドである\verb|\小問マス目| において、１行当たりの最大マス目数を指定します。デフォルトは20です。
+  \item[\KKverb|nongridmax|] 記述解答欄を出力するコマンドである\verb|\小問記述| において、１行当たりの最大マス目数を指定します。ただし、このコマンドではマス目は可視化されません。デフォルトは20です。
+  \item[\KKverb|unit|] 本パッケージでは「マス目単位で」各解答欄の位置を制御します。その際の１マスの幅を指定するのがこのオプションです。デフォルトは\verb|2\zw|です。
+  \item[\KKverb|wakuwidth|] 解答欄の枠線の太さを指定します。デフォルトは\verb|.7pt|です。
+  \item[\KKverb|tensenwakuwidth|] 欄の一部に使われている点線部分の太さを指定します。デフォルトは\verb|.7pt|です。
+  \item[\KKverb|tensenon|] 欄の一部に使われている点線部分のdash-patternを決めるためのもので、線の最小単位の長さを指定できます。デフォルトは\verb|1pt|です。
+  \item[\KKverb|tensenoff|] 欄の一部に使われている点線部分のdash-patternを決めるためのもので、最小単位の配置間隔を指定できます。デフォルトは\verb|1pt|です。
+  \item[\KKverb|clsadjust|] jlreqクラス以外を指定する場合は、\verb|clsadjust=1|を指定します。一部クラスにおいて\verb|\小問マス目|に解答を入力した際、字間の調整が適切になされない事例があるためです。この値のデフォルトは0になっています。このオプションは内部的に、\verb|clsadjust=1|のとき
+  \KKcodeS+
     \RequirePackage[scale=1]{luatexja-fontspec}
     \RequirePackage[deluxe,expert]{luatexja-preset}
-  \end{lstlisting}
-  \noindent を読み込むという処理をしているため、より詳細にこれらのオプションを設定したい場合には\verb|clsadjust=0|とし、適宜設定をしてください。
-  \item[fontdaimonbangou/fontshoumonbangou] 大問番号／小問番号のフォントを\verb|\gtfamily|や\verb|\small|のような形式で指定します。デフォルトは\verb|\relax|（つまり指定なし）です。
-  \item[styledaimonbangou/styleshoumonbangou] 大問番号／小問番号のスタイルを指定します。指定するのは「制御綴名」です。例えば``\verb|\maru{引数}|''（\verb|KKsymbols|パッケージが提供）を使用して大問番号を丸数字にしたいという場合、\verb|styleshoumonbangou=maru|とします。デフォルトは\verb|kakko|となっています。特に括弧や丸などをつけたくない場合、\verb|全角幅固定|と指定するのが推奨されます。
+  \KKcodeE
+  \noindent を読み込むという処理をしています。したがって、より詳細にこれらのオプションを設定したい場合には\verb|clsadjust=0|とし、適宜設定をしてください。
+  \item[\KKverb|fontdaimonbangou/fontshoumonbangou|] 大問番号／小問番号のフォントを\verb|\gtfamily|や\verb|\small|のような形式で指定します。デフォルトは\verb|\relax|（つまり指定なし）です。
+  \item[\KKverb|styledaimonbangou/styleshoumonbangou|] 大問番号／小問番号のスタイルを指定します。指定するのは「制御綴名」です。例えば``\verb|\maru{引数}|''（\verb|KKsymbols|パッケージが提供）を使用して大問番号を丸数字にしたいという場合、\verb|styleshoumonbangou=maru|とします。デフォルトは\verb|kakko|となっています。特に括弧や丸などをつけたくない場合、\verb|全角幅固定|と指定するのが推奨されます。
 \end{description}
 
 \section{使い方}
-\subsection{\textbackslash KKran}
+\subsection{\KKverb|\KKran|}
 このパッケージを使って解答欄を出力する場合、解答欄は\verb|\KKran[オプション]{引数}|の\verb|{引数}|に入れていくという形をとります。
 
 \begin{SourceCode}{Input}{TeX}
@@ -215,7 +215,7 @@ This is a package that offers commands for generating answer fields used in test
 
 基本的には\verb|\小問欄|を使いますが、同一の小問内で複数解答欄を用意する時などは、最後の欄以外を\verb|\小問中欄|にしても良いでしょう。
 
-欄内記入に関して、オプションとしてcenter,east,west,north east, north west, south east, south westをとることができ、各key名に対応する箇所をアンカーポイントとしてその引数が出力されます。tikzにおけるnodeのオプションと全く同様です。
+欄内記入に関して、オプションとして\KKverb|center,east,west,north east, north west, south east, south west|をとることができ、各key名に対応する箇所をアンカーポイントとしてその引数が出力されます。tikzにおけるnodeのオプションと全く同様です。
 
 引数には何を挿入してもよく、図表も挿入可能です。
 
@@ -422,9 +422,15 @@ tikzの描画も当然解答として入力可能ですが、
 
 \section{サンプル}
 \begin{SourceCode}{Input}{TeX}
-  \documentclass{jlreq}
+  \documentclass[paper=a4]{jlreq}
 
-  \usepackage[kaitouhyouji=1,gridmax=20,kaitoucolor=red,fontdaimonbangou=\gtfamily,styledaimonbangou=全角幅固定]{KKran}
+  \usepackage[
+    kaitouhyouji=1,
+    gridmax=20,
+    kaitoucolor=red,
+    fontdaimonbangou=\gtfamily,
+    styledaimonbangou=全角幅固定
+  ]{KKran}
 
   \begin{document}
   \KKran{%
@@ -435,12 +441,12 @@ tikzの描画も当然解答として入力可能ですが、
     \小問番号{2}\小問欄{5}{2}[center=\KaitouInput{春夜宴桃李園序}]\GoDown{2}
     \小問番号{4}\小問マス目[45]{65}[\KaitouInput{李白の著名な詩を元にした\全角幅固定{「}月日は百代の過客\全角幅固定{」}という表現を引いて旅に主題を仄めかしつつ\全角幅固定{、}滑らかにに自身の紀行文に主眼を移す役割\全角幅固定{。}}]\GoDown{4}
     \小問番号{1}\小問マス目{7}[\KaitouInput{道祖神の招き}]
-  }[shoumon=イロハ,daimon=ア]
+  }[shoumon=a,daimon=ア]
   \bigskip
 
   \KKran{%
-    \大問番号{7}\小問番号{2}\小問欄{3}{2}[center=\KaitouInput{144}]\小問番号{2}\小問欄{4}{2}[south east={$\mathrm{mm}$},center=\KaitouInput{$3.0$}, west={$x=$}]\GoDown{2}
-    \小問番号{5}\小問欄{8}{5}[center={\KaitouInput{%
+    \大問番号{10}\小問番号{2}\小問欄{3}{2}[center=\KaitouInput{144}]\小問番号{2}\小問欄{4}{2}[south east={$\mathrm{mm}$},center=\KaitouInput{$3.0$}, west={$x=$}]\GoDown{2}
+    \小問番号{8}\小問欄{9}{8}[center={\KaitouInput{%
       \begin{tikzpicture}
         \draw[domain=-1.5:1.5, samples=100, thick] plot (\x, {\x*\x});
         \draw[->,, black] (0, -.3) -- (0, 2.5) node[above] {$y$};
@@ -485,6 +491,7 @@ tikzの描画も当然解答として入力可能ですが、
     \item Add a new command \verb|\全角幅固定| to input ``半角英数字'' to the optional argument of \verb|\小問マス目|.
     \item Changed some dafault values of package options.
   \end{itemize}
+  \item \textbf{v1.1.5 (2026/02/17)} --- Fixed a bug where unwanted ``\KKverb|*|'' is output when \KKverb|styledaimon/shoumonbangou=全角幅固定| is specified and the optional argument of \KKverb|\KKran| is set as \KKverb|[shoumon=a]| or \KKverb|[daimon=a]|. 
 \end{itemize}
 
 \end{document}

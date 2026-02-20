@@ -11,8 +11,8 @@
 `KKran` is a LaTeX package designed for generating answer fields used in tests and exams. The package name originates from the Japanese word **"欄" (ran)**, which means a small area or field. It is fully compatible with both horizontal and vertical text layouts.<br>
 `KKran` は、テストや試験で作成される解答欄を生成するためのパッケージです。パッケージ名は「解答欄」などの「欄」に由来しています。横書き・縦書きの両方のフォーマットに完全対応しています。
 
-- **Version**: 1.1.5
-- **Date**: 2026-02-17
+- **Version**: 1.1.6
+- **Date**: 2026-02-20
 - **Author**: Kosei Kawaguchi (a.k.a. KKTeX)
 - **License**: MIT
 - **Repository**: [https://github.com/KKTeX/KKran](https://github.com/KKTeX/KKran)
